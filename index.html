@@ -38,7 +38,7 @@
     }
     intensity = Math.floor(histmod / maxval)
     maxval = maxval * .95;
-    result = Math.abs(Math.floor(count % 4 + intensity * 4  % 16));
+    result = Math.abs(Math.floor(count % 4 + intensity * 4) % 16);
     document.getElementById("valhists").innerHTML = 
       (`<br />${valhist[0]}, <br />${valhist[1]}, <br />${valhist[2]}, <br />${valhist[3]}, <br />${valhist[4]}` 
        + "<br />count: " + count + " \nintensity: " + intensity + "\n: " + "\n result: " + result);
