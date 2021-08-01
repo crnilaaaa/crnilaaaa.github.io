@@ -12,6 +12,7 @@
   var easing_range;
   var valhist = [0,0,0,0,0];
   var maxval = 1;
+  var sensor;
 
   Wad.logs.verbosity = 2;
 
@@ -53,16 +54,18 @@
   }
 
   function start_linacc_modulation() {
-    var sensor;
+    if(!sensor) {
     try {
       sensor = new LinearAccelerationSensor();
       sensor.addEventListener('reading', () => {
         valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist.slice(0, 4).flat()];
         document.getElementById.innerHTML.append(`<br />got reading: ${sensor.x}, ${sensor.y}, ${sensor.z}`);
       });
+      sensor.start()
     }
     catch {
       alert("no linear acceleration sensor w/o frequency hint");
+    }
     }
   }
 
