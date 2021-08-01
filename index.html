@@ -58,7 +58,7 @@
     try {
       sensor = new LinearAccelerationSensor();
       sensor.addEventListener('reading', () => {
-        valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist.slice(0, 4).flat()];
+        valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
         document.getElementById.innerHTML.append(`<br />got reading: ${sensor.x}, ${sensor.y}, ${sensor.z}`);
       });
       sensor.start()
