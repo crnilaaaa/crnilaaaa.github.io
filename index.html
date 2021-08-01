@@ -34,7 +34,7 @@
     var histmod = 0;
     
     if(valhist[0] > maxval) {
-      shuffleArray(amenchops);
+      document.getElementById("loggery") = "fuckery!!<br/>" + document.getElementById("loggery");
     }
     
     for(var i = 0; i < valhist.length; ++i) {
@@ -56,7 +56,7 @@
   function start_linacc_modulation() {
     if(!sensor) {
       try {
-        sensor = new LinearAccelerationSensor();
+        sensor = new LinearAccelerationSensor({frequency: 50});
         sensor.addEventListener('reading', () => {
           valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
           document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z}`);
@@ -104,7 +104,7 @@
   <button onclick="play_amen()">play amen!</button> <br/>
   <button onclick="start_linacc_modulation()">start accel mod!</button> <br/>
   <input id="rate" type="text" value="333"></input> milliseconds <br/>
-  <input id="intensity" type="range" max=65535 value="0"></input> &lt;- debug <br />
+  <input id="intensity" type="range" max="11" value="0"></input> &lt;- debug <br />
   <!--input id="intensity" type="text" value="0"></input> &lt;- 0,1,2,3 <br/-->
   <p id="loggery"></p> <br/>
   <p id="valhists"></p> <br/>
