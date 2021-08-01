@@ -44,6 +44,7 @@
       maxval = Math.max(valhist[i], maxval);
       histmod = histmod + valhist[i];
     }
+    maxval = maxval * .85;
     document.getElementById("intensities").innerHTML = `histvals: ${valhist[0]}, ${valhist[1]}, ${valhist[2]}, ${valhist[3]}, ${valhist[4]}`;
     intensity = Math.floor(histmod / maxval)
     result = Math.abs(Math.floor(((count + fuckery) % 4 + intensity * 4 ) % 16));
@@ -54,14 +55,14 @@
   function start_linacc_modulation() {
     var sensor;
     try {
-      sensor = new LinearAcceleration({ frequency: 100 });
+      sensor = new LinearAcceleration();
       sensor.addEventListener('reading', () => {
         valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist.slice(0, 4).flat()];
         document.getElementById.innerHTML.append(`<br />got reading: ${sensor.x}, ${sensor.y}, ${sensor.z}`);
       });
     }
     catch {
-      alert("no linear acceleration sensor at 100hz");
+      alert("no linear acceleration sensor w/o frequency hint");
     }
   }
 
