@@ -34,7 +34,7 @@
     var histmod = 0;
     
     if(valhist[0] > maxval) {
-      document.getElementById("loggery") = "fuckery!!<br/>" + document.getElementById("loggery");
+      document.getElementById("loggery").innerHTML = "fuckery!!<br/>" + document.getElementById("loggery").innerHTML;
     }
     
     for(var i = 0; i < valhist.length; ++i) {
