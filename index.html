@@ -50,7 +50,8 @@
     maxval = maxval * .95;
     result = Math.abs(Math.floor(((count + fuckery) % 4 + intensity * 4 ) % 16));
     if(valhist[0] > 2 * maxval || valhist[0] < maxval / 2) {
-      result = result - 2 > 0 ? result - 2 : result + 2; 
+      iterator.add(amenchops[result - 2 > 0 ? result - 2 : result + 2]); 
+      iterator.play();
     }
     console.log("count: " + count + " \nintensity: " + intensity + "\nfuckery: " + fuckery + "\n result: " + result);
     return result;
