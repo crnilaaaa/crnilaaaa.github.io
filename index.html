@@ -39,7 +39,7 @@
     
     for(var i = 0; i < valhist.length; ++i) {
       maxval = Math.max(valhist[i], maxval);
-      histmod = histmod + valhist[i] * 1/5;
+      histmod = histmod + valhist[i];
     }
     
     intensity = Math.floor(histmod / maxval);
