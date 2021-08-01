@@ -38,26 +38,32 @@
     }
     intensity = Math.floor(histmod / maxval)
     maxval = maxval * .95;
-    result = Math.abs(Math.floor(((count + fuckery) % 4 + intensity * 4 ) % 16));
+    result = Math.abs(Math.floor(count % 4 + intensity * 4  % 16));
     document.getElementById("valhists").innerHTML = 
       (`<br />${valhist[0]}, <br />${valhist[1]}, <br />${valhist[2]}, <br />${valhist[3]}, <br />${valhist[4]}` 
-       + "<br />count: " + count + " \nintensity: " + intensity + "\nfuckery: " + fuckery + "\n result: " + result);
+       + "<br />count: " + count + " \nintensity: " + intensity + "\n: " + "\n result: " + result);
     return result;
   }
 
   function start_linacc_modulation() {
     if(!sensor) {
-    try {
-      sensor = new LinearAccelerationSensor();
-      sensor.addEventListener('reading', () => {
-        valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
-        document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z}`);
-      });
-      sensor.start()
-    }
-    catch {
-      alert("no linear acceleration sensor w/o frequency hint");
-    }
+      try {
+        sensor = new LinearAccelerationSensor();
+        sensor.addEventListener('reading', () => {
+          valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
+          document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z}`);
+        });
+        sensor.start()
+      }
+      catch {
+        alert("no linear acceleration sensor w/o frequency hint");
+        var func;
+        func = function() { 
+          valhist = [document.getElementById("intensity"), valhist[0], valhist[1], valhist[2], valhist[3]];
+          setTimeout(50, func);
+        };
+        func();
+      }
     }
   }
 
@@ -95,9 +101,8 @@
   <button onclick="stop_amen()">stop amen!</button> <br/>
   <button onclick="start_linacc_modulation()">start accel mod!</button> <br/>
   <input id="rate" type="text" value="333"></input> milliseconds <br/>
-  <input id="easing_range" type=text" value="0"></input> &lt;- easing range <br />
+  <input id="intensity" type="range" max=65535 value="0"></input> &lt;- easing range <br />
   <!--input id="intensity" type="text" value="0"></input> &lt;- 0,1,2,3 <br/-->
-  <input id="fuckery" type="text" value="0"></input> &lt;- uhhh <br />
   <p id="loggery"></p> <br/>
   <p id="valhists"></p> <br/>
 </body>
