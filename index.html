@@ -41,7 +41,7 @@
    
     if(valhist[0] >= maxval) {
       document.getElementById("loggery").innerHTML = "fuckery!!<br/>" + document.getElementById("loggery").innerHTML;
-      amenchops[resulthist[1]].play();
+      amenchops[resulthist[1] + 4].play({offset: 150, rate: 1.3});
     }
      
     intensity = Math.floor(histmod / maxval) * 4;
@@ -50,7 +50,7 @@
     }
     maxval = maxval * .95;
     result = Math.abs(Math.floor(count % 4) % 16);
-
+    resulthist = [result, resulthist[0], resulthist[1], resulthist[2], resulthist[3]];
     document.getElementById("valhists").innerHTML = 
       (`<br />${valhist[0]}, <br />${valhist[1]}, <br />${valhist[2]}, <br />${valhist[3]}, <br />${valhist[4]}` 
        + "<br />count: " + count + " \nintensity: " + intensity + "\n: " + "\n result: " + result);
@@ -91,7 +91,7 @@
         count = count + 1;
         var which = figureOutWhichSlice(count);
         if (amenchops[which]) {
-          amenchops[which].play();
+          amenchops[which].play({rate:1.1});
           setTimeout(recursefunc, delay);
         } else { alert("whoops again! " + which) }
       }
