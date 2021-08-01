@@ -41,12 +41,12 @@
    
     if(valhist[0] >= maxval) {
       document.getElementById("loggery").innerHTML = "fuckery!!<br/>" + document.getElementById("loggery").innerHTML;
-      amenchops[resulthist[1]].play({offset: 80, rate: 1.3});
+      amenchops[resulthist[1]].play({offset: 100, rate: 1.3});
     }
      
     intensity = Math.floor(histmod * 4 / (maxval * 5));
     maxval = maxval * .95;
-    result = Math.abs(Math.floor(count % 4) % 16);
+    result = Math.abs(Math.floor(count % 4) * (1 + intensity));
     resulthist = [result, resulthist[0], resulthist[1], resulthist[2], resulthist[3]];
     document.getElementById("valhists").innerHTML = 
       (`<br />${valhist[0]}, <br />${valhist[1]}, <br />${valhist[2]}, <br />${valhist[3]}, <br />${valhist[4]}` 
