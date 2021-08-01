@@ -45,7 +45,7 @@
       maxval = Math.max(valhist[i], maxval);
       histmod = histmod + valhist[i];
     }
-    document.getElementById("loggery").innerHTML.append(`<br />${valhist[0]}, ${valhist[1]}, ${valhist[2]}, ${valhist[3]}, ${valhist[4]}`;
+    document.getElementById("loggery").innerHTML.append(`<br />${valhist[0]}, ${valhist[1]}, ${valhist[2]}, ${valhist[3]}, ${valhist[4]}`);
     intensity = Math.floor(histmod / maxval)
     maxval = maxval * .85;
     result = Math.abs(Math.floor(((count + fuckery) % 4 + intensity * 4 ) % 16));
