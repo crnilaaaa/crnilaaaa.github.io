@@ -10,8 +10,8 @@
   var running = false;
   var notset = true;
   var easing_range;
-  var history = [0,0,0,0,0];
-  var maxval = 0;
+  var valhist = [0,0,0,0,0];
+  var maxval = 1;
 
   Wad.logs.verbosity = 2;
 
@@ -29,8 +29,8 @@
   }
 
   function figureOutWhichSlice(count) {
-    var intensity = document.getElementById("intensity").value;
     var fuckery = document.getElementById("fuckery").value;
+    var intensity = 0;
     if(fuckery != 0) {
       while (fuckery > 1 || fuckery < 0) {
         fuckery = Math.abs(fuckery / 1400000000) * Math.random();
@@ -39,9 +39,10 @@
     }
     fuckery = 0; // FIXME: fuckery doesnt even work lol :l
     var histmod = 0;
-    for(var i = 0; i < history.length; ++i) {
-      maxval = Math.max(history[i], maxval);
-      histmod = histmod + history[i];
+    console.log(fuckery, maxval, valhist);
+    for(var i = 0; i < valhist.length; ++i) {
+      maxval = Math.max(valhist[i], maxval);
+      histmod = histmod + valhist[i];
     }
     intensity = Math.floor(histmod / maxval)
     result = Math.abs(Math.floor(((count + fuckery) % 4 + intensity * 4 ) % 16));
@@ -54,8 +55,8 @@
     try {
       sensor = new LinearAcceleration({ frequency: 100 });
       sensor.addEventListener('reading', () => {
-        history = [Math.hypot(sensor.x, sensor.y, sensor.z), history.slice(0, 4).flat()];
-      }
+        valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist.slice(0, 4).flat()];
+      });
     }
     catch {
       console.log("no linear acceleration sensor at 100hz");
