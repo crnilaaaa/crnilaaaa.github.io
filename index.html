@@ -30,17 +30,8 @@
   }
 
   function figureOutWhichSlice(count) {
-    var fuckery = document.getElementById("fuckery").value;
     var intensity = 0;
-    if(fuckery != 0) {
-      while (fuckery > 1 || fuckery < 0) {
-        fuckery = Math.abs(fuckery / 1400000000) * Math.random();
-      }
-      fuckery = fuckery > 0.3 ? fuckery < .6 ? 0 : Math.random() > .5 ? 1 : -1 : 0;
-    }
-    fuckery = 0; // FIXME: fuckery doesnt even work lol :l
     var histmod = 0;
-    console.log(fuckery, maxval, valhist);
     for(var i = 0; i < valhist.length; ++i) {
       maxval = Math.max(valhist[i], maxval);
       histmod = histmod + valhist[i];
@@ -48,11 +39,9 @@
     intensity = Math.floor(histmod / maxval)
     maxval = maxval * .95;
     result = Math.abs(Math.floor(((count + fuckery) % 4 + intensity * 4 ) % 16));
-    if(iterator && valhist[0] > 2 * maxval || valhist[0] < maxval / 2) {
-      iterator.add(amenchops[result - 2 > 0 ? result - 2 : result + 2]); 
-      iterator.play();
-    }
-    document.getElementById("valhists").innerHTML = (`<br />${valhist[0]}, <br />${valhist[1]}, <br />${valhist[2]}, <br />${valhist[3]}, <br />${valhist[4]}` + "<br />count: " + count + " \nintensity: " + intensity + "\nfuckery: " + fuckery + "\n result: " + result);
+    document.getElementById("valhists").innerHTML = 
+      (`<br />${valhist[0]}, <br />${valhist[1]}, <br />${valhist[2]}, <br />${valhist[3]}, <br />${valhist[4]}` 
+       + "<br />count: " + count + " \nintensity: " + intensity + "\nfuckery: " + fuckery + "\n result: " + result);
     return result;
   }
 
