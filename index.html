@@ -44,7 +44,7 @@
       maxval = Math.max(valhist[i], maxval);
       histmod = histmod + valhist[i];
     }
-    document.getElementById("intensities").text = "histvals: ${valhist[0]}, ${valhist[1]}, ${valhist[2]}, ${valhist[3]}, ${valhist[4]}";
+    document.getElementById("intensities").innerHTML = `histvals: ${valhist[0]}, ${valhist[1]}, ${valhist[2]}, ${valhist[3]}, ${valhist[4]}`;
     intensity = Math.floor(histmod / maxval)
     result = Math.abs(Math.floor(((count + fuckery) % 4 + intensity * 4 ) % 16));
     console.log("count: " + count + " \nintensity: " + intensity + "\nfuckery: " + fuckery + "\n result: " + result);
@@ -101,6 +101,6 @@
   <input id="easing_range" type=text" value="0"></input> &lt;- easing range <br />
   <!--input id="intensity" type="text" value="0"></input> &lt;- 0,1,2,3 <br/-->
   <input id="fuckery" type="text" value="0"></input> &lt;- uhhh <br />
-  <div id="intensities"></div>
+  <p id="intensities"></div>
 </body>
 </html>
