@@ -1,6 +1,7 @@
 <html>
 <script src="https://unpkg.com/web-audio-daw"></script>
   <!--<script src="wad.js"></script>-->
+2f]i  
 <script>
   var amen;
   var amenchops = [];
@@ -8,53 +9,78 @@
   var iterator;
   var running = false;
   var notset = true;
+  var easing_range;
+  var history = [];
+  var maxval = 0;
 
   Wad.logs.verbosity = 2;
 
   function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-      }
-  }  
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
 
   function make_amen() {
-    for (var i = 1; i < 4; ++i) {
-      var key = "b" + i;
-      for(var j = 1; j < 5; ++j) {
-        sprites[key + "b" + j] =
-          [ (i * j - 1) / 12, (i * j) / 12 ];
-      }
-    }
-
-    for (var i = 1; i < 13; ++i) {
+    for (var i = 1; i < 17; ++i) {
       amenchops[amenchops.length] = new Wad({source: `amen${i}.wav`});
     }
+  }
 
-    iterator = new Wad.SoundIterator({
-      files: amenchops,
-    });
+  function figureOutWhichSlice(count) {
+    var intensity = document.getElementById("intensity").value;
+    var fuckery = document.getElementById("fuckery").value;
+    if(fuckery != 0) {
+      while (fuckery > 1 || fuckery < 0) {
+        fuckery = Math.abs(fuckery / 1400000000) * Math.random();
+      }
+      fuckery = fuckery > 0.3 ? fuckery < .6 ? 0 : Math.random() > .5 ? 1 : -1 : 0;
+    }
+    fuckery = 0; // FIXME: fuckery doesnt even work lol :l
+    var histmod = 0;
+    for(var i = 0; i < history.length; ++i) {
+      maxval = Math.max(history[i], maxval);
+      histmod = histmod + history[i];
+    }
+    intensity = Math.floor(histmod / maxval)
+    result = Math.abs(Math.floor(((count + fuckery) % 4 + intensity * 4 ) % 16));
+    console.log("count: " + count + " \nintensity: " + intensity + "\nfuckery: " + fuckery + "\n result: " + result);
+    return result;
+  }
+
+  function start_linacc_modulation() {
+    var sensor;
+    try {
+      sensor = new LinearAcceleration({ frequency: 100 });
+      sensor.addEventListener('reading', () => {
+        history = [Math.hypot(sensor.x, sensor.y, sensor.z), history.slice(0, 4).flat()];
+      }
+    }
+    catch {
+      console.log("no linear acceleration sensor at 100hz");
+    }
   }
 
   function play_amen() {
     running = true;
+    var delay;
+    var count = 0;
     var recursefunc;
-    var time;
     recursefunc = function() {
-      var count = 0;
       if (running) {
-        time = document.getElementById("rate").value;
-        var which = Math.floor(((Math.random() * 51818) % 6) * 2 - (count % 2));
-        if (which > 11) { alert("whoops") };
+        delay = document.getElementById("rate").value;
+        count = count + 1;
+        var which = figureOutWhichSlice(count);
         if (amenchops[which]) {
-          iterator.add(amenchops[which]);
-          iterator.play();
-          setTimeout(recursefunc, time);
+          amenchops[which].play();
+          setTimeout(recursefunc, delay);
         } else { alert("whoops again! " + which) }
       }
     };
-    if (notset) {
-      setTimeout(recursefunc, time);
+
+    if (notset || !running) {
+      setTimeout(recursefunc, delay);
       notset = false;
     }
   }
@@ -65,9 +91,13 @@
 </script>
 <body>
   aaaaa >:c <br />
-  <button onclick="make_amen()">make amen!</button> <br />
-  <button onclick="play_amen()">play amen!</button> <br />
-  <button onclick="stop_amen()">stop amen!</button> <br />
-  <input id="rate" type="text" value="440"></input>
+  <button onclick="make_amen()">make amen!</button> <br/>
+  <button onclick="play_amen()">play amen!</button> <br/>
+  <button onclick="stop_amen()">stop amen!</button> <br/>
+  <button onclick="start_linacc_modulation()">start accel mod!</button> <br/>
+  <input id="rate" type="text" value="333"></input> milliseconds <br/>
+  <input id="easing_range" type=text" value="0"></input> &lt;- easing range <br />
+  <!--input id="intensity" type="text" value="0"></input> &lt;- 0,1,2,3 <br/-->
+  <input id="fuckery" type="text" value="0"></input> &lt;- uhhh <br />
 </body>
 </html>
