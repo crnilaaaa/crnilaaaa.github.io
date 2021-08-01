@@ -45,10 +45,13 @@
       maxval = Math.max(valhist[i], maxval);
       histmod = histmod + valhist[i];
     }
-    maxval = maxval * .85;
-    document.getElementById("intensities").innerHTML = `histvals: ${valhist[0]}, ${valhist[1]}, ${valhist[2]}, ${valhist[3]}, ${valhist[4]}`;
+    document.getElementById("loggery").innerHTML = `${valhist[0]}, ${valhist[1]}, ${valhist[2]}, ${valhist[3]}, ${valhist[4]}`;
     intensity = Math.floor(histmod / maxval)
+    maxval = maxval * .85;
     result = Math.abs(Math.floor(((count + fuckery) % 4 + intensity * 4 ) % 16));
+    if(valhist[0] > 2 * maxval) {
+      result = result - 1; 
+    }
     console.log("count: " + count + " \nintensity: " + intensity + "\nfuckery: " + fuckery + "\n result: " + result);
     return result;
   }
@@ -59,7 +62,7 @@
       sensor = new LinearAccelerationSensor();
       sensor.addEventListener('reading', () => {
         valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
-        document.getElementById.innerHTML.append(`<br />got reading: ${sensor.x}, ${sensor.y}, ${sensor.z}`);
+        document.getElementById("intensities").innerHTML.append(`<br />${sensor.x}, ${sensor.y}, ${sensor.z}`);
       });
       sensor.start()
     }
@@ -106,7 +109,6 @@
   <input id="easing_range" type=text" value="0"></input> &lt;- easing range <br />
   <!--input id="intensity" type="text" value="0"></input> &lt;- 0,1,2,3 <br/-->
   <input id="fuckery" type="text" value="0"></input> &lt;- uhhh <br />
-  <p id="intensities"></p>
   <p id="loggery"></p>
 </body>
 </html>
