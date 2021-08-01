@@ -57,6 +57,7 @@
       sensor = new LinearAcceleration({ frequency: 100 });
       sensor.addEventListener('reading', () => {
         valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist.slice(0, 4).flat()];
+        document.getElementById.innerHTML.append(`<br />got reading: ${sensor.x}, ${sensor.y}, ${sensor.z}`);
       });
     }
     catch {
@@ -101,6 +102,7 @@
   <input id="easing_range" type=text" value="0"></input> &lt;- easing range <br />
   <!--input id="intensity" type="text" value="0"></input> &lt;- 0,1,2,3 <br/-->
   <input id="fuckery" type="text" value="0"></input> &lt;- uhhh <br />
-  <p id="intensities"></div>
+  <p id="intensities"></p>
+  <p id="loggery"></p>
 </body>
 </html>
