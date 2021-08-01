@@ -56,7 +56,7 @@
   function start_linacc_modulation() {
     if(!sensor) {
       try {
-        sensor = new LinearAccelerationSensor({frequency: document.getElementById("rate").value});
+        sensor = new LinearAccelerationSensor({frequency: 1 / (document.getElementById("rate").value * 3)});
         sensor.addEventListener('reading', () => {
           valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
           document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z}`);
