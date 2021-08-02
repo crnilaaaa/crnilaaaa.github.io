@@ -58,7 +58,7 @@
   function start_linacc_modulation() {
     if(!sensor) {
       try {
-        sensor = new LinearAccelerationSensor({frequency: 3});
+        sensor = new LinearAccelerationSensor({frequency: 10});
         sensor.addEventListener('reading', () => {
           valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
           document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z}`);
@@ -67,12 +67,6 @@
       }
       catch {
         alert("no linear acceleration sensor w/o frequency hint");
-        var func;
-        func = function() { 
-          valhist = [document.getElementById("intensity"), valhist[0], valhist[1], valhist[2], valhist[3]];
-          setTimeout(50, func);
-        };
-        func();
       }
     }
   }
@@ -105,9 +99,8 @@
   <button onclick="make_amen()">make amen!</button> <br/>
   <button onclick="play_amen()">play amen!</button> <br/>
   <button onclick="start_linacc_modulation()">start accel mod!</button> <br/>
-  <input id="rate" type="text" value="333"></input> milliseconds <br/>
+  <input id="rate" disabled="true" type="text" value="333"></input> milliseconds <br/>
   <input id="intensity" type="range" max="11" value="0"></input> &lt;- debug <br />
-  <!--input id="intensity" type="text" value="0"></input> &lt;- 0,1,2,3 <br/-->
   <p id="loggery"></p> <br/>
   <p id="valhists"></p> <br/>
 </body>
