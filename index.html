@@ -42,7 +42,7 @@
    
     if(valhist[0] >= maxval) {
       document.getElementById("loggery").innerHTML = "fuckery!!<br/>" + document.getElementById("loggery").innerHTML;
-      amenchops[resulthist[1]].play({offset: 100, rate: 1.3});
+      amenchops[resulthist[1]].play({offset: 80, rate: 1.3});
     }
      
     intensity = Math.floor(histmod * 4 / (maxval * 5));
@@ -60,6 +60,7 @@
     if(sensor) { sensor.stop(); }
     
     try {
+      sensor_frequency = document.getElementById("rate");
       sensor = new LinearAccelerationSensor({frequency: sensor_frequency});
       sensor.addEventListener('reading', () => {
         valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
@@ -79,11 +80,11 @@
     var recursefunc;
     recursefunc = function() {
       if (running) {
-        delay = document.getElementById("rate").value;
+        delay = .34 / document.getElementById("rate").value;
         count = count + 1;
         var which = figureOutWhichSlice(count);
         if (amenchops[which]) {
-          amenchops[which].play({rate:1.1});
+          amenchops[which].play({rate:1.2});
           setTimeout(recursefunc, delay);
         } else { alert("whoops again! " + which) }
       }
@@ -100,8 +101,7 @@
   <button onclick="make_amen()">make amen!</button> <br/>
   <button onclick="play_amen()">play amen!</button> <br/>
   <button onclick="start_linacc_modulation()">start accel mod!</button> <br/>
-  <input id="rate" type="text" value="333"></input> milliseconds <br/> &lt;- sensor frequency in hz
-  <input id="intensity" type="range" max="11" value="0"></input> &lt;- debug <br />
+  <input id="rate" type="range" max="25"></input> &lt;- sensor frequency in hz
   <p id="loggery"></p> <br/>
   <p id="valhists"></p> <br/>
 </body>
