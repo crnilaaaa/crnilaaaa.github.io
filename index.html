@@ -14,6 +14,7 @@
   var maxval = 1;
   var sensor;
   var resulthist = [0, 3, 2, 1, 0];
+  var sensor_frequency = 5;
 
   Wad.logs.verbosity = 2;
 
@@ -56,18 +57,18 @@
   }
 
   function start_linacc_modulation() {
-    if(!sensor) {
-      try {
-        sensor = new LinearAccelerationSensor({frequency: 10});
-        sensor.addEventListener('reading', () => {
-          valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
-          document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z}`);
-        });
-        sensor.start()
-      }
-      catch {
-        alert("no linear acceleration sensor w/o frequency hint");
-      }
+    if(sensor) { sensor.stop(); }
+    
+    try {
+      sensor = new LinearAccelerationSensor({frequency: sensor_frequency});
+      sensor.addEventListener('reading', () => {
+        valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
+        document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z}`);
+      });
+      sensor.start()
+    }
+    catch {
+      alert("no linear acceleration sensor w/o frequency hint");
     }
   }
 
@@ -99,7 +100,7 @@
   <button onclick="make_amen()">make amen!</button> <br/>
   <button onclick="play_amen()">play amen!</button> <br/>
   <button onclick="start_linacc_modulation()">start accel mod!</button> <br/>
-  <input id="rate" disabled="true" type="text" value="333"></input> milliseconds <br/>
+  <input id="rate" type="text" value="333"></input> milliseconds <br/> &lt;- sensor frequency in hz
   <input id="intensity" type="range" max="11" value="0"></input> &lt;- debug <br />
   <p id="loggery"></p> <br/>
   <p id="valhists"></p> <br/>
