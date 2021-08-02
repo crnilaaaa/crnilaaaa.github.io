@@ -80,7 +80,7 @@
     var recursefunc;
     recursefunc = function() {
       if (running) {
-        delay = .34 / document.getElementById("rate").value;
+        delay = 3000 / document.getElementById("rate").value;
         count = count + 1;
         var which = figureOutWhichSlice(count);
         if (amenchops[which]) {
