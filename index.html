@@ -56,19 +56,20 @@
   }
 
   function start_linacc_modulation() {
-    if(sensor) { sensor.stop(); }
-    
-    try {
-      sensor_frequency = document.getElementById("rate");
-      sensor = new LinearAccelerationSensor({frequency: 5});
-      sensor.addEventListener('reading', () => {
-        valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
-        document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z}`);
-      });
-      sensor.start()
-    }
-    catch {
-      alert("no linear acceleration sensor w/o frequency hint");
+    if(!sensor) { 
+      
+      try {
+        sensor_frequency = document.getElementById("rate");
+        sensor = new LinearAccelerationSensor({frequency: 5});
+        sensor.addEventListener('reading', () => {
+          valhist = [Math.hypot(sensor.x, sensor.y, sensor.z), valhist[0], valhist[1], valhist[2], valhist[3]];
+          document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z}`);
+        });
+        sensor.start()
+      }
+      catch {
+        alert("no linear acceleration sensor w/o frequency hint");
+      }
     }
   }
 
