@@ -15,6 +15,32 @@
   var sensor;
   var resulthist = [0, 3, 2, 1, 0];
   
+///// clean code belwo directly stoeln from: https://github.com/webrtc/samples/blob/gh-pages/src/content/getusermedia/canvas/js/main.js
+// Put variables in global scope to make them available to the browser console.
+const video = document.querySelector('video');
+const canvas = window.canvas = document.querySelector('canvas');
+canvas.width = 480;
+canvas.height = 360;
+
+const constraints = {
+  audio: false,
+  video: true
+};
+
+function handleSuccess(stream) {
+  window.stream = stream; // make stream available to browser console
+  video.srcObject = stream;
+}
+
+function handleError(error) {
+  console.log('navigator.MediaDevices.getUserMedia error: ', error.message, error.name);
+}
+
+navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
+
+///// clean code above directly from: https://github.com/webrtc/samples/blob/gh-pages/src/content/getusermedia/canvas/js/main.js
+
+
   Wad.logs.verbosity = 2;
 
   function shuffleArray(array) {
@@ -95,6 +121,7 @@
       notset = false;
     }
   }
+
 </script>
 <body>
   aaaaa >:c <br />
@@ -104,5 +131,6 @@
   <input id="rate" type="range" max="25"></input>
   <p id="loggery"></p> <br/>
   <p id="valhists"></p> <br/>
+<canvas></canvas>
 </body>
 </html>
