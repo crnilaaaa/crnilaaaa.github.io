@@ -10,6 +10,7 @@
   var sensor;
   var resulthist = [0, 3, 2, 1, 0];
   
+/* idr why i thought i needed a camera? anyway
 ///// clean code belwo directly stoeln from: https://github.com/webrtc/samples/blob/gh-pages/src/content/getusermedia/canvas/js/main.js
 
   // Put variables in global scope to make them available to the browser console.
@@ -34,7 +35,7 @@ function handleError(error) {
 
 navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
 ///// clean code above directly from: https://github.com/webrtc/samples/blob/gh-pages/src/content/getusermedia/canvas/js/main.js
-
+*/
 
   Wad.logs.verbosity = 2;
 
