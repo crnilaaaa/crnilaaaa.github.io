@@ -88,9 +88,21 @@ navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handl
         });
         sensor.start()
       }
-      catch {
-        alert("no linear acceleration sensor w/o frequency hint");
+      catch (e) {
+        alert("no linear acceleration sensor: " + e.message);
+        try {
+          sensor = new Accelerometer();
+          sensor.addEventListener('reading', () => {
+            valhist = [Math.hypot(sensor.x, sensor.y, sensor.z - 9.8), valhist[0], valhist[1], valhist[2], valhist[3]];
+            document.getElementById("loggery").innerHTML = (`<br />${sensor.x}, <br />${sensor.y}, <br />${sensor.z - 9.8}`);
+          });
+          sensor.start()
+        }
+        catch (e) {
+          alert("no accelerometer: " + e.message); 
+        }
       }
+      
     }
   }
 
