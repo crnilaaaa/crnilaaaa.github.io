@@ -101,7 +101,7 @@ WebMidi.enable(function(err) {
         console.log("notestep: " + noteStep);
       }
       else if (vv == 66) {        
-        octaveRange > 0 ? ++octaveRange : console.log("octave range min");
+        octaveRange > 0 ? --octaveRange : console.log("octave range min");
       }
       else if (vv == 67) {
         console.log("octave range: " + (++octaveRange));
