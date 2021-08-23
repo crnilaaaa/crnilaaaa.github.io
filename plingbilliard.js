@@ -101,16 +101,18 @@ WebMidi.enable(function(err) {
         xstepLoop.stop();
         xstepLoop.dispose(); // vOv
       }
+      logg(
       xstepLoop = new Tone.Loop((time) => {
         position += xstep;
-        }, stepkinds[xstep]).start(0);
+        }, stepkinds[xstep]).start(0));
       if(ystepLoop) {
         ystepLoop.stop();
         ystepLoop.dispose();
       }
-      ystepLoop = new Tone.Loop((time) => {
+      logg(
+        ystepLoop = new Tone.Loop((time) => {
         position += ystep * 8;
-        }, stepkinds[ystep]).start(0);
+        }, stepkinds[ystep]).start(0));
     }
   });
   
