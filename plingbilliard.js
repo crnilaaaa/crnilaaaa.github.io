@@ -171,8 +171,8 @@ WebMidi.enable(function(err) {
         }
       }
       else if (toggled && 63 < vv < 68) {
+        green(vv);
         switch(vv) {
-          green(vv);
           case 64: ++ystep; break;
           case 65: --ystep; break;
           case 66: --xstep; break;
