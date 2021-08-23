@@ -67,7 +67,8 @@ WebMidi.enable(function(err) {
 
   function applyWorld() { 
     position += xstep + (8 * ystep);
-    position = position % 64;
+    position = position > 64 ? position % 64 :
+      position < 0 ? position + 64 : position;
   }
   
   const worldLoop = new Tone.Loop((time) => {
