@@ -73,15 +73,26 @@ WebMidi.enable(function(err) {
       */
   }
   var toggled = false;
+  var loops = { src: [], obj: []};
+  
   input.addListener('noteoff', 'all', 
     function(e) { 
-      off(e.data[1]); 
+      off(e.data[1]);
       if (e.data[1] < 64) { 
         synth.triggerRelease(note[e.data[1]]);
         togglecheck(e.data[1]);
         logg("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
       }
-      if (e.data[1] == 98) logg(toggled = false);
+      if (e.data[1] == 98) {
+        logg(toggled = false);
+        Tone.Transport.clear();
+        for (var i = 0; i < 64; ++i) {
+          if(loops[i]) {
+            loops.obj[i] = Tone.Loop((time) => {
+              synth.triggerAttackRelease(note[i], loops.src[i], "8n");
+          }, "4n").start(0)
+        }
+      }
   });
   
   input.addListener('noteon', 'all',
@@ -90,11 +101,16 @@ WebMidi.enable(function(err) {
       var ll = light_state;
       if (vv == 98) 
         logg("toggled: " + toggled = true);
-      else if (vv < 64) {
+      if (vv < 64) {        
         green(vv);
         togglecheck(vv);
         synth.triggerAttack(note[vv]);
         logg("playing " + note[vv] + " triggered by " + vv );
+        if (toggled) {
+          red(vv);
+          loops[vv] = "8n";
+          logg("looping " + vv);
+        }
       }
       else if (vv == 64) {
         setUpNoteGrid(++noteStep);
