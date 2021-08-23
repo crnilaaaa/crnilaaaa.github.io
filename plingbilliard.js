@@ -103,7 +103,15 @@ WebMidi.enable(function(err) {
       }
       logg(
       xstepLoop = new Tone.Loop((time) => {
-        position += xstep;
+          if(triggers[position]) {
+            synth.triggerRelease(note[position]);
+            red(position);
+          }
+          position += xstep;
+          if(triggers[position]) {
+            synth.triggerAttack(note[position]);
+            green(position);
+          }
         }, stepkinds[xstep]).start(0));
       if(ystepLoop) {
         ystepLoop.stop();
@@ -111,7 +119,15 @@ WebMidi.enable(function(err) {
       }
       logg(
         ystepLoop = new Tone.Loop((time) => {
-        position += ystep * 8;
+          if(triggers[position]) {
+            synth.triggerRelease(note[position]);
+            red(position);
+          }
+          position += ystep * 8;
+          if(triggers[position]) {
+            synth.triggerAttack(note[position]);
+            green(position);
+          }
         }, stepkinds[ystep]).start(0));
     }
   });
