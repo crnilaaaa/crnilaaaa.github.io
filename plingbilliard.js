@@ -73,7 +73,15 @@ WebMidi.enable(function(err) {
   }
   
   const worldLoop = new Tone.Loop((time) => {
+    off(position);
+    
     applyWorld();
+    logg("position: " + position);
+    red(position);
+    toggleblink(position);
+    if(triggers[position]) {
+      synth.triggerAttackRelease(note[i], "8n");
+    }
   }, "4n").start(0);
   
   var toggled = false;
