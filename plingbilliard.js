@@ -20,7 +20,6 @@ WebMidi.enable(function(err) {
     new Tone.FMSynth().toDestination().triggerAttackRelease(myNote, "8n", time); // debug
     applyWorld();
   }, "4n").start(0);
-  Tone.Transport.start();
     
   input.addListener('noteon', 'all',
     function(e) {
@@ -39,3 +38,7 @@ WebMidi.enable(function(err) {
     }
   );
 });
+
+function doStart {
+  Tone.Transport.start();  
+}
