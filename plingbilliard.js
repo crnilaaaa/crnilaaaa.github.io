@@ -1,6 +1,10 @@
+function logg(text) {
+  document.getElementById("log").value.prepend(text + "\n");
+}
+
 WebMidi.enable(function(err) {
   if(err) {
-    console.log("blerg", err);
+    logg("blerg", err);
   }
   var synth = new Tone.PolySynth().toDestination();
   var input = WebMidi.inputs[2];
@@ -44,13 +48,14 @@ WebMidi.enable(function(err) {
       return ["C", "D", "E", "F", "G", "A", "B"][__scalePosition];
     }
     
-    for(var i = 0; i < 64; ++i) {
+    note[0] = "C3";
+    for(var i = 1; i < 64; ++i) {
        note[i] = scale(step) + octave; 
     }
   }
 
   setUpNoteGrid();
-  console.log(note);
+  logg(note);
   
   var green = (btn) => { output.send(0x90, [btn, light_state[btn] = 1]); };
   var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 2]); };
@@ -74,7 +79,7 @@ WebMidi.enable(function(err) {
       if (e.data[1] < 64) { 
         synth.triggerRelease(note[e.data[1]]);
         togglecheck(e.data[1]);
-        // console.log("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
+        logg("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
       }
   });
   
@@ -88,23 +93,23 @@ WebMidi.enable(function(err) {
         green(vv);
         togglecheck(vv);
         synth.triggerAttack(note[vv]);
-        // console.log("playing " + note[vv] + " triggered by " + vv );
+        log("playing " + note[vv] + " triggered by " + vv );
       }
       else if (vv == 64) {
         setUpNoteGrid(++noteStep);
-        console.log("notestep: " + noteStep);
+        log("notestep: " + noteStep);
       }
       else if (vv == 65) {
         if (noteStep > 0) {
           setUpNoteGrid(--noteStep);
         }
-        console.log("notestep: " + noteStep);
+        logg("notestep: " + noteStep);
       }
       else if (vv == 66) {        
-        octaveRange > 0 ? --octaveRange : console.log("octave range min");
+        octaveRange > 0 ? --octaveRange : logg("octave range min");
       }
       else if (vv == 67) {
-        console.log("octave range: " + (++octaveRange));
+        logg("octave range: " + (++octaveRange));
       }
     }
   );
