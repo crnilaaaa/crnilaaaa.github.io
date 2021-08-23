@@ -2,6 +2,9 @@ function logg(text) {
   document.getElementById("log").prepend(text + "\n");
 }
 
+var xstepLoop;
+var ystepLoop;
+
 WebMidi.enable(function(err) {
   if(err) {
     logg("blerg", err);
