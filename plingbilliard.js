@@ -94,8 +94,10 @@ WebMidi.enable(function(err) {
     if(triggers[position]) {
       synth.triggerRelease(note[position]);
       red(position);
-    }
+    } else { off(position); }
     position += xstep;
+    position = position % 64;
+    position = position < 0 ? position + 64 : position;
     if(triggers[position]) {
       synth.triggerAttack(note[position]);
     }
@@ -107,8 +109,10 @@ WebMidi.enable(function(err) {
     if(triggers[position]) {
       synth.triggerRelease(note[position]);
       red(position);
-    }
+    } else { off(position); }
     position += ystep * 8;
+    position = position % 64;
+    position = position < 0 ? position + 64 : position;
     if(triggers[position]) {
       synth.triggerAttack(note[position]);
     }
@@ -126,6 +130,7 @@ WebMidi.enable(function(err) {
     }
     if (toggled && 63 < e.data[1] < 68) {
       switch(e.data[1]) {
+        off(e.data[1]);
         case 64: if (ystepLoop) ystepLoop.stop(); 
           ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); 
           break;
@@ -167,6 +172,7 @@ WebMidi.enable(function(err) {
       }
       else if (toggled && 63 < vv < 68) {
         switch(vv) {
+          green(vv);
           case 64: ++ystep; break;
           case 65: --ystep; break;
           case 66: --xstep; break;
@@ -177,7 +183,7 @@ WebMidi.enable(function(err) {
         xstep = xstep == stepkinds.length ? stepkinds.length - 1 : xstep
         ystep = ystep < 0 ? 0 : ystep;
         ystep = ystep == stepkinds.length ? stepkinds.length - 1 : ystep
-        logg("xstep: " + xstep + " ystep: " + ystep);
+        logg("xstep: " + xstep + " " + stepkinds[xstep] + "  ystep: " + ystep + stepkinds[ystep]);
       }
       else if (vv == 64) {
         setUpNoteGrid(++noteStep);
