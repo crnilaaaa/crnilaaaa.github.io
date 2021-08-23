@@ -73,7 +73,7 @@ WebMidi.enable(function(err) {
       off(e.data[1]); 
       if (e.data[1] < 64) { 
         synth.triggerRelease(note[e.data[1]]);
-        togglecheck(vv);
+        togglecheck(e.data[1]);
         // console.log("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
       }
   });
