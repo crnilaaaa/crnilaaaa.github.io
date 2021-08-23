@@ -31,15 +31,15 @@ WebMidi.enable(function(err) {
   
   function setUpNoteGrid(step = 1) {
     var __scalePosition = 0;
-    var octave = 4;
+    var octave = 3;
     var scale = (step = 1) => {
       __scalePosition += step;
-      if (__scalePosition > 7) {
+      if (__scalePosition >= 7) {
         octave++;
         __scalePosition = 0
       }
-      if (octave > octaveRange + 4) {
-        octave = 4; 
+      if (octave > octaveRange + 3) {
+        octave = 3; 
       }
       return ["C", "D", "E", "F", "G", "A", "B"][__scalePosition];
     }
