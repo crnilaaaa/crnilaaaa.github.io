@@ -82,6 +82,7 @@ WebMidi.enable(function(err) {
   input.addListener('noteoff', 'all', function(e) { 
     if (e.data[1] < 64) { 
       synth.triggerRelease(note[e.data[1]]);
+      if (!toggled) off(e.data[1]);
     }
     if (e.data[1] == 98) {
       logg("toggled: " + (toggled = false));
