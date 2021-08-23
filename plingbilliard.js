@@ -10,6 +10,7 @@ WebMidi.enable(function(err) {
   var input = WebMidi.inputs[2];
   var output = WebMidi.outputs[2];
   var light_state = [];
+  var position;
   for (var i = 0; i < 64; i++) { light_state[i] = 0 };
   var allOff = () => {
     for (var i = 0; i < 64; i++) {
@@ -20,8 +21,8 @@ WebMidi.enable(function(err) {
   
   var octaveRange = 0;
   var noteStep = 1;
-  var xstep;
-  var ystep;
+  var xstep = 0;
+  var ystep = 0;
   var note = 
    [0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 
@@ -67,18 +68,19 @@ WebMidi.enable(function(err) {
     document.getElementById("checkbox" + ck).checked ? false : true; };
 
   function applyWorld() { 
-      /*
-      var siteState = [];
-      for (var i = 0; i < 64; ++i) {
-        siteState[i] = document.getElementById("checkbox" + i).checked; 
-      }
-      */
+    position += xstep + (8 * ystep);
+    position = position % 64;
+    
   }
+  
+  const worldLoop = new Tone.Loop((time) => {
+    applyWorld();
+  }, "4n").start(0);
+  
   var toggled = false;
-  var loops = { src: [], obj: []};
+  var triggers = [];
   
   input.addListener('noteoff', 'all', function(e) { 
-    off(e.data[1]);
     if (e.data[1] < 64) { 
       synth.triggerRelease(note[e.data[1]]);
       togglecheck(e.data[1]);
@@ -86,6 +88,9 @@ WebMidi.enable(function(err) {
       if(toggled) {
         loops.src[e.data[1]] = "";
         logg("unlooping " + note[e.data[1]]);
+      }
+      else {
+        off(e.data[1]);
       }
     }
     if (e.data[1] == 98) {
@@ -107,17 +112,13 @@ WebMidi.enable(function(err) {
         logg("toggled: " + (toggled = true));
       if (vv < 64) {        
         if (toggled) {
-          if(loops.src[vv]) {
-            loops.src[vv] = "";
+          if(triggers[vv]) {
+            logg("trigger " + vv + ": " + (triggers[vv] = false));
+            off(vv);
           } else {
-            loops.src[vv] = "8n";
-            logg("prelooping: " + note[vv] + " every 4n for " + loops.src[vv]);
-            loops.obj[vv] = new Tone.Loop((time) => {
-              synth.triggerAttackRelease(note[vv], loops.src[vv]);
-              logg("looping: " + note[vv] + " every 4n for " + loops.src[vv]);
-            }, "4n");
+            logg("trigger " + vv + ": " + (triggers[vv] = true));
+            red(vv);
           }
-          red(vv);
         } else { 
           green(vv); 
           togglecheck(vv);
