@@ -113,7 +113,7 @@ WebMidi.enable(function(err) {
             synth.triggerAttack(note[position]);
             green(position);
           }
-        }, stepkinds[xstep]).start(0);
+        }, stepkinds[xstep]).start();
       if(ystepLoop) {
         ystepLoop.stop();
         ystepLoop.dispose();
@@ -130,7 +130,7 @@ WebMidi.enable(function(err) {
             synth.triggerAttack(note[position]);
             green(position);
           }
-        }, stepkinds[ystep]).start(0);
+        }, stepkinds[ystep]).start();
     }
   });
   
@@ -140,6 +140,7 @@ WebMidi.enable(function(err) {
   }
   logg(
   xstepLoop = new Tone.Loop((time) => {
+      logg("xsteploop");
       if(triggers[position]) {
         synth.triggerRelease(note[position]);
         red(position);
@@ -156,6 +157,7 @@ WebMidi.enable(function(err) {
   }
   logg(
     ystepLoop = new Tone.Loop((time) => {
+      logg("ysteploop");
       if(triggers[position]) {
         synth.triggerRelease(note[position]);
         red(position);
