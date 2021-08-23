@@ -47,6 +47,8 @@ function setUpNoteGrid(root = 48, step = 1) {
     note[i] = note[i] + ystep;
   }
 }
+
+setUpNoteGrid();
   
 var green = (btn) => { output.send(0x90, [btn, light_state[btn] = 1]); };
 var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 2]); };
@@ -93,6 +95,5 @@ const click = new Tone.Loop(time => {
 
 function doStart() {
   Tone.start();
-  Tone.Transport.start();  
-  setUpNoteGrid();
+  Tone.Transport.start();
 }
