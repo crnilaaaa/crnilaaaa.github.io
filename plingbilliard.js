@@ -35,6 +35,25 @@ WebMidi.enable(function(err) {
 
   /* C major: 48 50 52 53 55 57 59 60
              0  2  4  5  7  9 11 12 */
+  const stepkinds = [
+    "1n",
+    "2n",
+    "2n.",
+    "2t",
+    "4n",
+    "4n.",
+    "4t",
+    "8n",
+    "8n.",
+    "8t",
+    "16n",
+    "16n.",
+    "16t",
+    "32n",
+    "32n.",
+    "32t",
+    "64n"
+    ];
   
   function setUpNoteGrid(step = 1) {
     var __scalePosition = 0;
@@ -65,22 +84,8 @@ WebMidi.enable(function(err) {
   var toggleblink = (btn) => { output.send(0x90, btn, Math.abs(light_state[btn] - 4)); };
   var off = (btn) => { output.send(0x90, [btn, 0]); };
 
-  function applyWorld() { 
-    position += xstep + (8 * ystep);
-    position = position > 64 ? position % 64 :
-      position < 0 ? position + 64 : position;
-  }
-  
-  const worldLoop = new Tone.Loop((time) => {
-    triggers[position] ? red(position) : off(position);    
-    applyWorld();
-    logg("position: " + position);
-    green(position);
-    if(triggers[position]) {
-      synth.triggerAttackRelease(note[position], "8n");
-    }
-  }, "4n").start(0);
-  
+  var xstepLoop;
+  var ystepLoop; 
   var toggled = false;
   var triggers = [];
   
@@ -92,6 +97,20 @@ WebMidi.enable(function(err) {
     }
     if (e.data[1] == 98) {
       logg("toggled: " + (toggled = false));
+      if(xstepLoop) {
+        xstepLoop.stop();
+        xstepLoop.dispose(); // vOv
+      }
+      xstepLoop = new Tone.Loop((time) => {
+        position += xstep;
+        }, stepKinds[xstep]).start(0);
+      if(ystepLoop) {
+        ystepLoop.stop();
+        ystepLoop.dispose();
+      }
+      ystepLoop = new Tone.Loop((time) => {
+        position += ystep * 8;
+        }, stepKinds[ystep]).start(0);
     }
   });
   
@@ -126,6 +145,10 @@ WebMidi.enable(function(err) {
           case 67: ++xstep; break;
           default: break;
         }
+        xstep = xstep < 0 ? 0 : xstep;
+        xstep = xstep == stepKinds.length ? stepKinds.length - 1 : xstep
+        ystep = ystep < 0 ? 0 : ystep;
+        ystep = ystep == stepKinds.length ? stepKinds.length - 1 : ystep
         logg("xstep: " + xstep + " ystep: " + ystep);
       }
       else if (vv == 64) {
