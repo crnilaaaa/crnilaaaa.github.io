@@ -86,7 +86,7 @@ WebMidi.enable(function(err) {
       logg("toggled: " + (toggled = false));
       Tone.Transport.clear();
       for (var i = 0; i < 64; ++i) {
-        if(loops[i].src) {
+        if(loops.src[i]) {
           loops.obj[i] = Tone.Loop((time) => {
             synth.triggerAttackRelease(note[i], loops.src[i]);
             }, "4n");
