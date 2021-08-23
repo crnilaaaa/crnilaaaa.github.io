@@ -12,6 +12,15 @@ WebMidi.enable(function(err) {
       document.getElementById("checkbox" + i).indeterminate = false; // ??
     }
   };
+  
+  function applyWorld() { }
+  var myNote = "C2";
+  
+  const click = new Tone.Loop(time => {
+    new Tone.FMSynth().toDestination().triggerAttackRelease(myNote, "8n", time); // debug
+    applyWorld();
+  }, "4n").start(0);
+  Tone.Transport.start();
     
   input.addListener('noteon', 'all',
     function(e) {
@@ -25,6 +34,7 @@ WebMidi.enable(function(err) {
         if(ll[vv] > 6) { ll[vv] = 0 };
         document.getElementById("checkbox" + vv).indeterminate = ll[vv] != 0 ? true : false; // ??
         output.send(0x90, [vv, ll[vv]]);
+        myNote = vv + 12;
       }
     }
   );
