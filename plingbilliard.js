@@ -14,8 +14,6 @@ WebMidi.enable(function(err) {
     }
   };
  
-var xstep = 0;
-var ystep = 0;
 var note = 
  [0, 0, 0, 0, 0, 0, 0, 0, 
   0, 0, 0, 0, 0, 0, 0, 0, 
@@ -30,6 +28,7 @@ var note =
              0  2  4  5  7  9 11 12 */
 function setUpNoteGrid(root = 48, step = 1) {
   note[0] = root; // C3
+  xstep = ystep = step;
   for (var y = 0, i = 0; y < 8; ++y) {
     for (var x = 1; x < 8; ++x) {
       i = x + x * y;
@@ -88,6 +87,7 @@ const click = new Tone.Loop(time => {
         document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??  
         synth.triggerAttack(note[vv]);
       }
+      else if (
     }
   );
 });
