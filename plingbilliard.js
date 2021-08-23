@@ -94,4 +94,5 @@ const click = new Tone.Loop(time => {
 function doStart() {
   Tone.start();
   Tone.Transport.start();  
+  setUpNoteGrid();
 }
