@@ -87,7 +87,6 @@ const click = new Tone.Loop(time => {
         document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??  
         synth.triggerAttack(note[vv]);
       }
-      else if (
     }
   );
 });
