@@ -91,16 +91,20 @@ WebMidi.enable(function(err) {
         // console.log("playing " + note[vv] + " triggered by " + vv );
       }
       else if (vv == 64) {
-        octaveRange++;
         setUpNoteGrid(++noteStep);
         console.log("notestep: " + noteStep);
       }
       else if (vv == 65) {
-        console.log("notestep: " + noteStep);
         if (noteStep > 0) {
           setUpNoteGrid(--noteStep);
         }
+        console.log("notestep: " + noteStep);
+      }
+      else if (vv == 66) {        
         octaveRange > 0 ? ++octaveRange : console.log("octave range min");
+      }
+      else if (vv == 67) {
+        console.log("octave range: " +++octaveRange);
       }
     }
   );
