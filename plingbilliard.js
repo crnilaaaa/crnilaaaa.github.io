@@ -129,8 +129,8 @@ WebMidi.enable(function(err) {
       logg("toggled: " + (toggled = false));
     }
     if (toggled && 63 < e.data[1] < 68) {
+      off(e.data[1]);
       switch(e.data[1]) {
-        off(e.data[1]);
         case 64: if (ystepLoop) ystepLoop.stop(); 
           ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); 
           break;
