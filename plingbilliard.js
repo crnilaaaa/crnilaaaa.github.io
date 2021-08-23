@@ -72,7 +72,7 @@ WebMidi.enable(function(err) {
       }
       */
   }
-  
+  var toggled = false;
   input.addListener('noteoff', 'all', 
     function(e) { 
       off(e.data[1]); 
@@ -81,6 +81,7 @@ WebMidi.enable(function(err) {
         togglecheck(e.data[1]);
         logg("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
       }
+      if (e.data[1] == 98) toggled = false;
   });
   
   input.addListener('noteon', 'all',
@@ -88,7 +89,7 @@ WebMidi.enable(function(err) {
       var vv = e.data[1];
       var ll = light_state;
       if (vv == 98) 
-        allOff();
+        toggled = true;
       else if (vv < 64) {
         green(vv);
         togglecheck(vv);
