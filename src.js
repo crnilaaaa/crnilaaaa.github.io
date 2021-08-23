@@ -24,6 +24,28 @@ const constraints = {
   video: true
 };
 
+var light_state = [];
+for (int i = 0; i <64; i++) {
+  light_state[i] = 0;
+}
+  
+function doapc {
+  WebMidi.enable(function(err) {
+    if(err) {
+    console.log("blerg", err);
+    }
+    var input = WebMidi.inputs[2];
+    var output = WebMidi.outputs[2];
+    input.addListener('noteon', 'all',
+      function(e) {
+        console.log("noteon " + e.note.name + e.note.octave);
+        var noteval;
+        output.send(0x90, [e.data[1], light_state[e.data[1]]++]);
+        if (light_state[e.data[1]] > 5) { light_state[e.data[1]] = 0; }
+      }
+  });
+}
+
 function handleSuccess(stream) {
   window.stream = stream; // make stream available to browser console
   video.srcObject = stream;
@@ -36,7 +58,10 @@ function handleError(error) {
 navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handleError);
 ///// clean code above directly from: https://github.com/webrtc/samples/blob/gh-pages/src/content/getusermedia/canvas/js/main.js
 */
-
+    var flipbits = function (v, digits) {
+        return ~v & (Math.pow(2, digits) - 1);
+    }
+    
   Wad.logs.verbosity = 2;
 
   function shuffleArray(array) {
