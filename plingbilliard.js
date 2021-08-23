@@ -82,24 +82,9 @@ WebMidi.enable(function(err) {
   input.addListener('noteoff', 'all', function(e) { 
     if (e.data[1] < 64) { 
       synth.triggerRelease(note[e.data[1]]);
-      togglecheck(e.data[1]);
-      logg("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
-      if(toggled) {
-        loops.src[e.data[1]] = "";
-        logg("unlooping " + note[e.data[1]]);
-      }
-      else {
-        off(e.data[1]);
-      }
     }
     if (e.data[1] == 98) {
       logg("toggled: " + (toggled = false));
-      Tone.Transport.clear();
-      for (var i = 0; i < 64; ++i) {
-        if(loops.obj[i]) {
-          loops.obj[i].start(0);
-        }
-      }
     }
   });
   
@@ -111,6 +96,7 @@ WebMidi.enable(function(err) {
         logg("toggled: " + (toggled = true));
       if (vv < 64) {        
         if (toggled) {
+          togglecheck(vv);
           if(triggers[vv]) {
             logg("trigger " + vv + ": " + (triggers[vv] = false));
             off(vv);
@@ -120,7 +106,6 @@ WebMidi.enable(function(err) {
           }
         } else { 
           green(vv); 
-          togglecheck(vv);
           synth.triggerAttack(note[vv]);
           logg("playing " + note[vv] + " triggered by " + vv );
         }
