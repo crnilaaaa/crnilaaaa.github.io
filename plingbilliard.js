@@ -31,7 +31,8 @@ WebMidi.enable(function(err) {
   function setUpNoteGrid(step = 1) {
     var i = 0;
     var scale = (step = 1) => {
-      return ["C", "D", "E", "F", "G", "A", "B"][i++%7];
+      i += step;
+      return ["C", "D", "E", "F", "G", "A", "B"][i%7];
     }
     for(var i = 0; i < 64; ++i) {
        note[i] = scale(step) + "4"; 
@@ -66,7 +67,7 @@ WebMidi.enable(function(err) {
         off(e.data[1]); 
         if (e.data[1] < 64) { 
           synth.triggerRelease(note[e.data[1]]);
-          console.log("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
+          // console.log("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
         }
     });
     input.addListener('noteon', 'all',
@@ -79,15 +80,17 @@ WebMidi.enable(function(err) {
           green(vv);
           document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??  
           synth.triggerAttack(note[vv]);
-          console.log("playing " + note[vv] + " triggered by " + vv );
+          // console.log("playing " + note[vv] + " triggered by " + vv );
         }
         else if (vv == 64) {
           setUpNoteGrid(++noteStep);
+          console.log("notestep: " + noteStep);
         }
         else if (vv == 65) {
-           if (step > 0) {
-             setUpNoteGrid(--noteStep);
-           }
+          console.log("notestep: " + noteStep);
+          if (step > 0) {
+            setUpNoteGrid(--noteStep);
+          }
         }
       }
     );
