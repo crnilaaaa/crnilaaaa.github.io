@@ -36,7 +36,7 @@ WebMidi.enable(function(err) {
     }
     */
   }
-  
+  var myNote;
   const click = new Tone.Loop(time => {
     new Tone.FMSynth().toDestination().triggerAttackRelease(myNote, "8n", time); // debug
     applyWorld();
