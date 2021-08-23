@@ -123,7 +123,13 @@ WebMidi.enable(function(err) {
     }
     if (e.data[1] == 98) {
       logg("toggled: " + (toggled = false));
-      
+    }
+    if (toggled && 63 < e.data[1] < 68) {
+      switch(e.data[1]) {
+        case 64: ystepLoop.stop; ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); break;
+        case 65: ystepLoop.stop; ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); break;
+        case 66: xstepLoop.stop; xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); break;
+        case 67: xstepLoop.stop; xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); break;
     }
   });
   
