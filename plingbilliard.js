@@ -152,6 +152,7 @@ WebMidi.enable(function(err) {
           case 66: ++xstep; break;
           case 67: ++ystep; break;
           default: break;
+        }
       }
     }
   );
