@@ -10,7 +10,7 @@ WebMidi.enable(function(err) {
   var input = WebMidi.inputs[2];
   var output = WebMidi.outputs[2];
   var light_state = [];
-  var position;
+  var position = 0;
   for (var i = 0; i < 64; i++) { light_state[i] = 0 };
   var allOff = () => {
     for (var i = 0; i < 64; i++) {
@@ -77,7 +77,7 @@ WebMidi.enable(function(err) {
     
     applyWorld();
     logg("position: " + position);
-    red(position);
+    green(position);
     toggleblink(position);
     if(triggers[position]) {
       synth.triggerAttackRelease(note[i], "8n");
