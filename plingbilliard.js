@@ -101,34 +101,36 @@ WebMidi.enable(function(err) {
         xstepLoop.stop();
         xstepLoop.dispose(); // vOv
       }
-      logg(
       xstepLoop = new Tone.Loop((time) => {
           if(triggers[position]) {
             synth.triggerRelease(note[position]);
             red(position);
           }
           position += xstep;
+          position = position > 63 ? position - 64 : position;
+          position = position < 0 ? position + 64 : position;
           if(triggers[position]) {
             synth.triggerAttack(note[position]);
             green(position);
           }
-        }, stepkinds[xstep]).start(0));
+        }, stepkinds[xstep]).start(0);
       if(ystepLoop) {
         ystepLoop.stop();
         ystepLoop.dispose();
       }
-      logg(
         ystepLoop = new Tone.Loop((time) => {
           if(triggers[position]) {
             synth.triggerRelease(note[position]);
             red(position);
           }
           position += ystep * 8;
+          position = position > 63 ? position - 64 : position;
+          position = position < 0 ? position + 64 : position;
           if(triggers[position]) {
             synth.triggerAttack(note[position]);
             green(position);
           }
-        }, stepkinds[ystep]).start(0));
+        }, stepkinds[ystep]).start(0);
     }
   });
   
