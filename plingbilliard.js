@@ -86,12 +86,7 @@ WebMidi.enable(function(err) {
       logg("toggled: " + (toggled = false));
       Tone.Transport.clear();
       for (var i = 0; i < 64; ++i) {
-        if(loops.src[i]) {
-          logg("prelooping: " + note[i] + " every 4n for " + loops.src[i]);
-          loops.obj[i] = new Tone.Loop((time) => {
-            synth.triggerAttackRelease(note[i], loops.src[i]);
-            logg("looping: " + note[i] + " every 4n for " + loops.src[i]);
-          }, "4n");
+        if(loops.obj[i]) {
           loops.obj[i].start(0);
         }
       }
@@ -115,7 +110,11 @@ WebMidi.enable(function(err) {
           } else {
             red(vv);
             loops.src[vv] = "8n";
-            logg("looping " + vv);
+            logg("prelooping: " + note[vv] + " every 4n for " + loops.src[vv]);
+            loops.obj[vv] = new Tone.Loop((time) => {
+              synth.triggerAttackRelease(note[i], loops.src[i]);
+              logg("looping: " + note[vv] + " every 4n for " + loops.src[vv]);
+            }, "4n");
           }
         }
       }
