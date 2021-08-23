@@ -78,7 +78,6 @@ WebMidi.enable(function(err) {
           allOff();
         else if (vv < 64) {
           green(vv);
-          document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??  
           synth.triggerAttack(note[vv]);
           // console.log("playing " + note[vv] + " triggered by " + vv );
         }
@@ -88,7 +87,7 @@ WebMidi.enable(function(err) {
         }
         else if (vv == 65) {
           console.log("notestep: " + noteStep);
-          if (step > 0) {
+          if (noteStep > 0) {
             setUpNoteGrid(--noteStep);
           }
         }
