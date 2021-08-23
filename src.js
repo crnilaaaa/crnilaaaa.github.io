@@ -140,7 +140,7 @@ WebMidi.enable(function(err) {
   var input = WebMidi.inputs[2];
   var output = WebMidi.outputs[2];
   var light_state = [];
-  for (int i = 0; i <64; i++) {
+  for (var i = 0; i <64; i++) {
     light_state[i] = 0;
   }    
   input.addListener('noteon', 'all',
