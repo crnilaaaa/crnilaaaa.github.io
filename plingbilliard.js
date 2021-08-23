@@ -78,7 +78,6 @@ WebMidi.enable(function(err) {
     applyWorld();
     logg("position: " + position);
     green(position);
-    toggleblink(position);
     if(triggers[position]) {
       synth.triggerAttackRelease(note[i], "8n");
     }
