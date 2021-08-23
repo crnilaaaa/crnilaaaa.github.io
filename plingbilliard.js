@@ -39,6 +39,6 @@ WebMidi.enable(function(err) {
   );
 });
 
-function doStart {
+function doStart() {
   Tone.Transport.start();  
 }
