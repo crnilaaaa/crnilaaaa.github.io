@@ -150,17 +150,18 @@ WebMidi.enable(function(err) {
   input.addListener('noteon', 'all',
     function(e) {
       console.log("noteon " + e.note.name + e.note.octave, e.data);
-    switch(e.data[1]) {
-      case 98: allOff(); break;
-      default:
-        var vv = e.data[1];
-        var ll = light_state;
-        ll[vv]++;
-        if(ll[vv] > 5) { ll[vv] = 0 };
-        document.getElementById("checkbox" + vv).indeterminate = ll[vv] != 0 ? true : false; // ??
-        output.send(0x90, [vv, ll[vv]]);
+      switch (e.data[1]) {
+        case 98: allOff(); break;
+        default:
+          var vv = e.data[1];
+          var ll = light_state;
+          ll[vv]++;
+          if(ll[vv] > 5) { ll[vv] = 0 };
+          document.getElementById("checkbox" + vv).indeterminate = ll[vv] != 0 ? true : false; // ??
+          output.send(0x90, [vv, ll[vv]]);
+      }
     }
-  );
+  );  
 });
 
 
