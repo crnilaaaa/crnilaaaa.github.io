@@ -26,7 +26,7 @@ WebMidi.enable(function(err) {
   
   var green = (btn) => { output.send(0x90, [btn, light_state[btn] = 1]); };
   var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 2]); };
-  var toggleblink = (btn) => { output.send(0x90, btn, Math.abs(light_state[btn] - 4)); }:
+  var toggleblink = (btn) => { output.send(0x90, btn, Math.abs(light_state[btn] - 4)); };
   
   function applyWorld() { 
     /*
