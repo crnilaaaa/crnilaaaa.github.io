@@ -6,7 +6,7 @@ WebMidi.enable(function(err) {
   if(err) {
     logg("blerg", err);
   }
-  var synth = new Tone.PolySynth({ release: "32n" }).toDestination();
+  var synth = new Tone.PolySynth({ release: .1 }).toDestination();
   var input = WebMidi.inputs[2];
   var output = WebMidi.outputs[2];
   var light_state = [];
@@ -108,7 +108,7 @@ WebMidi.enable(function(err) {
           if(loops.src[vv]) {
             loops.src[vv] = "";
           } else {
-            loops.src[vv] = "16n";
+            loops.src[vv] = "8n";
             logg("prelooping: " + note[vv] + " every 4n for " + loops.src[vv]);
             loops.obj[vv] = new Tone.Loop((time) => {
               synth.triggerAttackRelease(note[vv], loops.src[vv]);
