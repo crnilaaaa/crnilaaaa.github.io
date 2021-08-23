@@ -64,8 +64,6 @@ WebMidi.enable(function(err) {
   var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 3]); };
   var toggleblink = (btn) => { output.send(0x90, btn, Math.abs(light_state[btn] - 4)); };
   var off = (btn) => { output.send(0x90, [btn, 0]); };
-  var togglecheck = (ck) => {  document.getElementById("checkbox" + ck).checked =
-    document.getElementById("checkbox" + ck).checked ? false : true; };
 
   function applyWorld() { 
     position += xstep + (8 * ystep);
@@ -106,7 +104,6 @@ WebMidi.enable(function(err) {
       // gotta sort the toggle better etc
       if (vv < 64) {        
         if (toggled) {
-          togglecheck(vv);
           if(triggers[vv]) {
             logg("trigger " + vv + ": " + (triggers[vv] = false));
             off(vv);
