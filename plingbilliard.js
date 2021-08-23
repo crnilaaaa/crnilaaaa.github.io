@@ -12,9 +12,30 @@ WebMidi.enable(function(err) {
       document.getElementById("checkbox" + i).indeterminate = false; // ??
     }
   };
+
+  var noteMap = [
+    "C4,", "E4,", "G4,", "B4,", "C4,", "E4,", "G4,", "B4,", 
+    "D4,", "F4,", "G4,", "B4,", "D4,", "F4,", "G4,", "B4,",
+    "A4,", "C4,", "E4,", "B4,", "A4,", "C4,", "E4,", "B4,",
+    "E4,", "F4,", "A4,", "C4,", "E4,", "F4,", "A4,", "F4,",
+    "G4,", "B4,", "C4,", "E4,", "G4,", "B4,", "C4,", "E4,",
+    "B4,", "D4,", "F4,", "G4,", "B4,", "D4,", "F4,", "G4,",
+    "E4,", "B4,", "A4,", "C4,", "E4,", "B4,", "A4,", "C4,",
+    "C4,", "E4,", "F4,", "A4,", "C4,", "E4,", "F4,", "A4,", 
+];
   
-  function applyWorld() { }
-  var myNote = "C2";
+  var green = (btn) => { output.send(0x90, [btn, light_state[btn] = 1]); };
+  var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 2]); };
+  var toggleblink = (btn) => { output.send(0x90, btn, Math.abs(light_state[btn] - 4)); }:
+  
+  function applyWorld() { 
+    /*
+    var siteState = [];
+    for (var i = 0; i < 64; ++i) {
+      siteState[i] = document.getElementById("checkbox" + i).checked; 
+    }
+    */
+  }
   
   const click = new Tone.Loop(time => {
     new Tone.FMSynth().toDestination().triggerAttackRelease(myNote, "8n", time); // debug
@@ -30,10 +51,11 @@ WebMidi.enable(function(err) {
         allOff();
       else if (vv < 64) {
         ll[vv]++;
-        if(ll[vv] > 6) { ll[vv] = 0 };
-        document.getElementById("checkbox" + vv).indeterminate = ll[vv] != 0 ? true : false; // ??
+        if(ll[vv] > 2) { ll[vv] = 0 };
+        allOff();
+        document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??
         output.send(0x90, [vv, ll[vv]]);
-        myNote = vv + 12;
+        myNote = noteMap[vv];
       }
     }
   );
