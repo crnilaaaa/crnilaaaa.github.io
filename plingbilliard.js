@@ -112,7 +112,7 @@ WebMidi.enable(function(err) {
             loops.src[vv] = "8n";
             logg("prelooping: " + note[vv] + " every 4n for " + loops.src[vv]);
             loops.obj[vv] = new Tone.Loop((time) => {
-              synth.triggerAttackRelease(note[i], loops.src[i]);
+              synth.triggerAttackRelease(note[vv], loops.src[vv]);
               logg("looping: " + note[vv] + " every 4n for " + loops.src[vv]);
             }, "4n");
           }
