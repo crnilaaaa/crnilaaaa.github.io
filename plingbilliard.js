@@ -70,7 +70,6 @@ WebMidi.enable(function(err) {
   function applyWorld() { 
     position += xstep + (8 * ystep);
     position = position % 64;
-    
   }
   
   const worldLoop = new Tone.Loop((time) => {
@@ -152,7 +151,7 @@ WebMidi.enable(function(err) {
           case 65: --ystep; break;
           case 66: ++xstep; break;
           case 67: ++ystep; break;
-          default:
+          default: break;
       }
     }
   );
