@@ -14,26 +14,27 @@ WebMidi.enable(function(err) {
     }
   };
  
-var note = 
- [0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0,
-  0, 0, 0, 0, 0, 0, 0, 0, 
-  0, 0, 0, 0, 0, 0, 0, 0];
+  var noteStep = 1;
+  var note = 
+   [0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 
+    0, 0, 0, 0, 0, 0, 0, 0];
 
   /* C major: 48 50 52 53 55 57 59 60
              0  2  4  5  7  9 11 12 */
   
-  function setUpNoteGrid() {
+  function setUpNoteGrid(step = 1) {
     var i = 0;
     var scale = (step = 1) => {
       return ["C", "D", "E", "F", "G", "A", "B"][i++%7];
     }
     for(var i = 0; i < 64; ++i) {
-       note[i] = scale() + "4"; 
+       note[i] = scale(step) + "4"; 
     }
   }
 
@@ -79,6 +80,14 @@ var note =
           document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??  
           synth.triggerAttack(note[vv]);
           console.log("playing " + note[vv] + " triggered by " + vv );
+        }
+        else if (vv == 64) {
+          setUpNoteGrid(++noteStep);
+        }
+        else if (vv == 65) {
+           if (step > 0) {
+             setUpNoteGrid(--noteStep);
+           }
         }
       }
     );
