@@ -104,7 +104,7 @@ WebMidi.enable(function(err) {
         octaveRange > 0 ? ++octaveRange : console.log("octave range min");
       }
       else if (vv == 67) {
-        console.log("octave range: " +++octaveRange);
+        console.log("octave range: " + (++octaveRange));
       }
     }
   );
