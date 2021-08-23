@@ -1,4 +1,4 @@
-const synth = new Oscillator();
+const synth = new PolySynth();
 
 WebMidi.enable(function(err) {
   if(err) {
