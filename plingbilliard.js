@@ -53,12 +53,12 @@ WebMidi.enable(function(err) {
     
     note[0] = "C3";
     for(var i = 1; i < 64; ++i) {
-       note[i] = scale(step) + octave; 
+      note[i] = scale(step) + octave;
+      document.getElementById("textbox" + i).text = note[i];
     }
   }
-
+ 
   setUpNoteGrid();
-  logg(note);
   
   var green = (btn) => { output.send(0x90, [btn, light_state[btn] = 1]); };
   var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 3]); };
@@ -128,6 +128,7 @@ WebMidi.enable(function(err) {
           case 67: ++ystep; break;
           default: break;
         }
+        logg("xstep: " + xstep + " ystep: " + ystep);
       }
       else if (vv == 64) {
         setUpNoteGrid(++noteStep);
