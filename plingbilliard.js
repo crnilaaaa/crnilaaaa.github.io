@@ -40,7 +40,7 @@ WebMidi.enable(function(err) {
       __scalePosition += step;
       if (__scalePosition >= 7) {
         octave++;
-        __scalePosition = 0
+        __scalePosition -= 7
       }
       if (octave > octaveRange + 3) {
         octave = 3; 
