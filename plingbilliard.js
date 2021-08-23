@@ -1,9 +1,8 @@
-const synth = new PolySynth();
-
 WebMidi.enable(function(err) {
   if(err) {
     console.log("blerg", err);
   }
+  var synth = new PolySynth();
   var input = WebMidi.inputs[2];
   var output = WebMidi.outputs[2];
   var light_state = [];
