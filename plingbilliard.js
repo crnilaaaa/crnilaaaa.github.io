@@ -71,13 +71,12 @@ WebMidi.enable(function(err) {
   }
   
   const worldLoop = new Tone.Loop((time) => {
-    off(position);
-    
+    triggers[position] ? red(position) : off(position);    
     applyWorld();
     logg("position: " + position);
     green(position);
     if(triggers[position]) {
-      synth.triggerAttackRelease(note[i], "8n");
+      synth.triggerAttackRelease(note[position], "8n");
     }
   }, "4n").start(0);
   
@@ -88,6 +87,7 @@ WebMidi.enable(function(err) {
     if (e.data[1] < 64) { 
       synth.triggerRelease(note[e.data[1]]);
       if (!toggled) off(e.data[1]);
+      if (triggers[e.data[1]]) red(e.data[1]);
     }
     if (e.data[1] == 98) {
       logg("toggled: " + (toggled = false));
@@ -121,8 +121,8 @@ WebMidi.enable(function(err) {
         switch(vv) {
           case 64: ++ystep; break;
           case 65: --ystep; break;
-          case 66: ++xstep; break;
-          case 67: ++ystep; break;
+          case 66: --xstep; break;
+          case 67: ++xstep; break;
           default: break;
         }
         logg("xstep: " + xstep + " ystep: " + ystep);
