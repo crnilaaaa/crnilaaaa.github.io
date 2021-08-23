@@ -14,6 +14,7 @@ WebMidi.enable(function(err) {
     }
   };
  
+  var octaveRange = 0;
   var noteStep = 1;
   var note = 
    [0, 0, 0, 0, 0, 0, 0, 0, 
@@ -29,13 +30,22 @@ WebMidi.enable(function(err) {
              0  2  4  5  7  9 11 12 */
   
   function setUpNoteGrid(step = 1) {
-    var __scalePosition = 0
+    var __scalePosition = 0;
+    var octave = 4;
     var scale = (step = 1) => {
       __scalePosition += step;
-      return ["C", "D", "E", "F", "G", "A", "B"][__scalePosition % 7];
+      if (__scalePosition > 7) {
+        octave++;
+        __scalePosition = 0
+      }
+      if (octave > octaveRange + 4) {
+        octave = 4; 
+      }
+      return ["C", "D", "E", "F", "G", "A", "B"][__scalePosition];
     }
+    
     for(var i = 0; i < 64; ++i) {
-       note[i] = scale(step) + "4"; 
+       note[i] = scale(step) + octave; 
     }
   }
 
@@ -46,7 +56,7 @@ WebMidi.enable(function(err) {
   var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 2]); };
   var toggleblink = (btn) => { output.send(0x90, btn, Math.abs(light_state[btn] - 4)); };
   var off = (btn) => { output.send(0x90, [btn, 0]); };
-
+  var togglecheck = (ck) => { document.getElementById("checkbox" + ck).checked
 
   function applyWorld() { 
       /*
@@ -79,9 +89,11 @@ WebMidi.enable(function(err) {
         else if (vv < 64) {
           green(vv);
           synth.triggerAttack(note[vv]);
+          
           // console.log("playing " + note[vv] + " triggered by " + vv );
         }
         else if (vv == 64) {
+          octaveRange++;
           setUpNoteGrid(++noteStep);
           console.log("notestep: " + noteStep);
         }
@@ -90,6 +102,7 @@ WebMidi.enable(function(err) {
           if (noteStep > 0) {
             setUpNoteGrid(--noteStep);
           }
+          octaveRange > 0 ? ++octaveRange : console.log("octave range min");
         }
       }
     );
