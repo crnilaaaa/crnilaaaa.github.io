@@ -66,46 +66,41 @@ WebMidi.enable(function(err) {
       }
       */
   }
-  /*
-  const click = new Tone.Loop(time => {
-    new Tone.FMSynth().toDestination().triggerAttackRelease(myNote, "8n", time); // debug
-    applyWorld();
-  }, "4n").start(0);
-  */
-    input.addListener('noteoff', 'all', 
-      function(e) { 
-        off(e.data[1]); 
-        if (e.data[1] < 64) { 
-          synth.triggerRelease(note[e.data[1]]);
-          // console.log("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
-        }
-    });
-    input.addListener('noteon', 'all',
-      function(e) {
-        var vv = e.data[1];
-        var ll = light_state;
-        if (vv == 98) 
-          allOff();
-        else if (vv < 64) {
-          green(vv);
-          synth.triggerAttack(note[vv]);
-          
-          // console.log("playing " + note[vv] + " triggered by " + vv );
-        }
-        else if (vv == 64) {
-          octaveRange++;
-          setUpNoteGrid(++noteStep);
-          console.log("notestep: " + noteStep);
-        }
-        else if (vv == 65) {
-          console.log("notestep: " + noteStep);
-          if (noteStep > 0) {
-            setUpNoteGrid(--noteStep);
-          }
-          octaveRange > 0 ? ++octaveRange : console.log("octave range min");
-        }
+  
+  input.addListener('noteoff', 'all', 
+    function(e) { 
+      off(e.data[1]); 
+      if (e.data[1] < 64) { 
+        synth.triggerRelease(note[e.data[1]]);
+        // console.log("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
       }
-    );
+  });
+  
+  input.addListener('noteon', 'all',
+    function(e) {
+      var vv = e.data[1];
+      var ll = light_state;
+      if (vv == 98) 
+        allOff();
+      else if (vv < 64) {
+        green(vv);
+        synth.triggerAttack(note[vv]);
+        // console.log("playing " + note[vv] + " triggered by " + vv );
+      }
+      else if (vv == 64) {
+        octaveRange++;
+        setUpNoteGrid(++noteStep);
+        console.log("notestep: " + noteStep);
+      }
+      else if (vv == 65) {
+        console.log("notestep: " + noteStep);
+        if (noteStep > 0) {
+          setUpNoteGrid(--noteStep);
+        }
+        octaveRange > 0 ? ++octaveRange : console.log("octave range min");
+      }
+    }
+  );
 });
 
 function doStart() {
