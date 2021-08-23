@@ -83,7 +83,7 @@ WebMidi.enable(function(err) {
       logg("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
     }
     if (e.data[1] == 98) {
-      logg(toggled = false);
+      logg("toggled: " + (toggled = false));
       Tone.Transport.clear();
       for (var i = 0; i < 64; ++i) {
         if(loops[i].src) {
@@ -101,7 +101,7 @@ WebMidi.enable(function(err) {
       var vv = e.data[1];
       var ll = light_state;
       if (vv == 98) 
-        logg("toggled: " + toggled = true);
+        logg("toggled: " + (toggled = true));
       if (vv < 64) {        
         green(vv);
         togglecheck(vv);
