@@ -140,12 +140,17 @@ WebMidi.enable(function(err) {
   var input = WebMidi.inputs[2];
   var output = WebMidi.outputs[2];
   var light_state = [];
-  for (var i = 0; i <64; i++) {
-    light_state[i] = 0;
-  }    
+  var allOff = () => {
+    for (var i = 0; i < 64; i++) {
+      output.send(0x90, [light_state[i] = 0, 0]);
+    }
+  }
+  allOff();
+
   input.addListener('noteon', 'all',
     function(e) {
-      console.log("noteon " + e.note.name + e.note.octave);
+      console.log("noteon " + e.note.name + e.note.octave, e.data);
+      if(e.data[1] == 98) allOff();
       var vv = e.data[1];
       var ll = light_state;
       ll[vv]++;
@@ -155,3 +160,5 @@ WebMidi.enable(function(err) {
     }
   );
 });
+
+
