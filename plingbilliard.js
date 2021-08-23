@@ -126,10 +126,18 @@ WebMidi.enable(function(err) {
     }
     if (toggled && 63 < e.data[1] < 68) {
       switch(e.data[1]) {
-        case 64: ystepLoop.stop; ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); break;
-        case 65: ystepLoop.stop; ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); break;
-        case 66: xstepLoop.stop; xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); break;
-        case 67: xstepLoop.stop; xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); break;
+        case 64: if (ystepLoop) ystepLoop.stop(); 
+          ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); 
+          break;
+        case 65: if (ystepLoop) ystepLoop.stop; 
+          ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); 
+          break;
+        case 66: if (xstepLoop) xstepLoop.stop; 
+          xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); 
+          break;
+        case 67: if (xstepLoop) xstepLoop.stop; 
+          xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); 
+          break;
       }
     }
   });
