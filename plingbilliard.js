@@ -104,9 +104,6 @@ WebMidi.enable(function(err) {
       if (vv == 98) 
         logg("toggled: " + (toggled = true));
       if (vv < 64) {        
-        togglecheck(vv);
-        synth.triggerAttack(note[vv]);
-        logg("playing " + note[vv] + " triggered by " + vv );
         if (toggled) {
           if(loops.src[vv]) {
             loops.src[vv] = "";
@@ -119,7 +116,12 @@ WebMidi.enable(function(err) {
             }, "4n");
           }
           red(vv);
-        } else { green(vv); }
+        } else { 
+          green(vv); 
+          togglecheck(vv);
+          synth.triggerAttack(note[vv]);
+          logg("playing " + note[vv] + " triggered by " + vv );
+        }
       }
       else if (vv == 64) {
         setUpNoteGrid(++noteStep);
