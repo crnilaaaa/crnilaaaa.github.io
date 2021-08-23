@@ -130,6 +130,7 @@ WebMidi.enable(function(err) {
         case 65: ystepLoop.stop; ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); break;
         case 66: xstepLoop.stop; xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); break;
         case 67: xstepLoop.stop; xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); break;
+      }
     }
   });
   
