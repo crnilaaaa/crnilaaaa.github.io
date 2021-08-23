@@ -75,24 +75,25 @@ WebMidi.enable(function(err) {
   var toggled = false;
   var loops = { src: [], obj: []};
   
-  input.addListener('noteoff', 'all', 
-    function(e) { 
-      off(e.data[1]);
-      if (e.data[1] < 64) { 
-        synth.triggerRelease(note[e.data[1]]);
-        togglecheck(e.data[1]);
-        logg("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
-      }
-      if (e.data[1] == 98) {
-        logg(toggled = false);
-        Tone.Transport.clear();
-        for (var i = 0; i < 64; ++i) {
-          if(loops[i]) {
-            loops.obj[i] = Tone.Loop((time) => {
-              synth.triggerAttackRelease(note[i], loops.src[i], "8n");
-          }, "4n").start(0)
+  input.addListener('noteoff', 'all', function(e) { 
+    off(e.data[1]);
+    if (e.data[1] < 64) { 
+      synth.triggerRelease(note[e.data[1]]);
+      togglecheck(e.data[1]);
+      logg("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
+    }
+    if (e.data[1] == 98) {
+      logg(toggled = false);
+      Tone.Transport.clear();
+      for (var i = 0; i < 64; ++i) {
+        if(loops[i].src) {
+          loops.obj[i] = Tone.Loop((time) => {
+            synth.triggerAttackRelease(note[i], loops.src[i]);
+            }, "4n");
+          loops.obj[i].start(0);
         }
       }
+    }
   });
   
   input.addListener('noteon', 'all',
@@ -108,7 +109,7 @@ WebMidi.enable(function(err) {
         logg("playing " + note[vv] + " triggered by " + vv );
         if (toggled) {
           red(vv);
-          loops[vv] = "8n";
+          loops.src[vv] = "8n";
           logg("looping " + vv);
         }
       }
