@@ -1,5 +1,5 @@
 function logg(text) {
-  document.getElementById("log").value.prepend(text + "\n");
+  document.getElementById("log").prepend(text + "\n");
 }
 
 WebMidi.enable(function(err) {
