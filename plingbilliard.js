@@ -28,11 +28,10 @@ var note =
              0  2  4  5  7  9 11 12 */
 function setUpNoteGrid(root = 48, step = 1) {
   note[0] = root; // C3
-  xstep = ystep = step;
   for (var y = 0, i = 0; y < 8; ++y) {
     for (var x = 1; x < 8; ++x) {
       i = x + x * y;
-      note[i] = note[i-1] + xstep;
+      note[i] = note[i-1] + step;
       note[i] = note[i] % 12;
       switch(note[i]) {
         case 1:
@@ -44,7 +43,6 @@ function setUpNoteGrid(root = 48, step = 1) {
         default: break;
       }
     }
-    note[i] = note[i] + ystep;
   }
 }
 
