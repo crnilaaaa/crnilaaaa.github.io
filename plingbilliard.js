@@ -1,4 +1,4 @@
-const synth = new OmniOscillator();
+const synth = new Oscillator();
 
 WebMidi.enable(function(err) {
   if(err) {
@@ -54,6 +54,7 @@ var green = (btn) => { output.send(0x90, [btn, light_state[btn] = 1]); };
 var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 2]); };
 var toggleblink = (btn) => { output.send(0x90, btn, Math.abs(light_state[btn] - 4)); };
 var off = (btn) => { output.send(0x90, [btn, 0]); };
+
   
 function applyWorld() { 
     /*
@@ -69,7 +70,13 @@ const click = new Tone.Loop(time => {
   applyWorld();
 }, "4n").start(0);
 */
-  input.addListener('noteoff', 'all', function(e) { off(e.data[1]); });
+  input.addListener('noteoff', 'all', 
+    function(e) { 
+      off(e.data[1]); 
+      if (e.data[1] < 64) { 
+        synth.triggerRelease(e.data[1]);
+      }
+  });
   input.addListener('noteon', 'all',
     function(e) {
       var vv = e.data[1];
@@ -79,7 +86,8 @@ const click = new Tone.Loop(time => {
         allOff();
       else if (vv < 64) {
         green(vv);
-        document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??      
+        document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??  
+        synth.triggerAttack(note[vv]);
       }
     }
   );
