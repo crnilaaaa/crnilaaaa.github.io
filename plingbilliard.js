@@ -50,11 +50,9 @@ WebMidi.enable(function(err) {
       if (vv == 98) 
         allOff();
       else if (vv < 64) {
-        ll[vv]++;
-        if(ll[vv] > 2) { ll[vv] = 0 };
         allOff();
+        green(vv);
         document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??
-        output.send(0x90, [vv, ll[vv]]);
         myNote = noteMap[vv];
       }
     }
