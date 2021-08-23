@@ -81,7 +81,7 @@ WebMidi.enable(function(err) {
         togglecheck(e.data[1]);
         logg("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
       }
-      if (e.data[1] == 98) toggled = false;
+      if (e.data[1] == 98) logg(toggled = false);
   });
   
   input.addListener('noteon', 'all',
@@ -89,7 +89,7 @@ WebMidi.enable(function(err) {
       var vv = e.data[1];
       var ll = light_state;
       if (vv == 98) 
-        toggled = true;
+        logg("toggled: " + toggled = true);
       else if (vv < 64) {
         green(vv);
         togglecheck(vv);
