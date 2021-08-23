@@ -107,9 +107,11 @@ WebMidi.enable(function(err) {
       }
       else if (vv == 66) {        
         octaveRange > 0 ? --octaveRange : logg("octave range min");
+        setUpNoteGrid(noteStep);
       }
       else if (vv == 67) {
         logg("octave range: " + (++octaveRange));
+        setUpNoteGrid(noteStep);
       }
     }
   );
