@@ -103,14 +103,14 @@ WebMidi.enable(function(err) {
       }
       xstepLoop = new Tone.Loop((time) => {
         position += xstep;
-        }, stepKinds[xstep]).start(0);
+        }, stepkinds[xstep]).start(0);
       if(ystepLoop) {
         ystepLoop.stop();
         ystepLoop.dispose();
       }
       ystepLoop = new Tone.Loop((time) => {
         position += ystep * 8;
-        }, stepKinds[ystep]).start(0);
+        }, stepkinds[ystep]).start(0);
     }
   });
   
@@ -146,9 +146,9 @@ WebMidi.enable(function(err) {
           default: break;
         }
         xstep = xstep < 0 ? 0 : xstep;
-        xstep = xstep == stepKinds.length ? stepKinds.length - 1 : xstep
+        xstep = xstep == stepkinds.length ? stepkinds.length - 1 : xstep
         ystep = ystep < 0 ? 0 : ystep;
-        ystep = ystep == stepKinds.length ? stepKinds.length - 1 : ystep
+        ystep = ystep == stepkinds.length ? stepkinds.length - 1 : ystep
         logg("xstep: " + xstep + " ystep: " + ystep);
       }
       else if (vv == 64) {
