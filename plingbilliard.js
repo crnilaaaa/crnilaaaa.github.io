@@ -58,7 +58,7 @@ WebMidi.enable(function(err) {
   logg(note);
   
   var green = (btn) => { output.send(0x90, [btn, light_state[btn] = 1]); };
-  var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 2]); };
+  var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 3]); };
   var toggleblink = (btn) => { output.send(0x90, btn, Math.abs(light_state[btn] - 4)); };
   var off = (btn) => { output.send(0x90, [btn, 0]); };
   var togglecheck = (ck) => {  document.getElementById("checkbox" + ck).checked =
@@ -100,7 +100,6 @@ WebMidi.enable(function(err) {
       if (vv == 98) 
         logg("toggled: " + (toggled = true));
       if (vv < 64) {        
-        green(vv);
         togglecheck(vv);
         synth.triggerAttack(note[vv]);
         logg("playing " + note[vv] + " triggered by " + vv );
@@ -116,7 +115,7 @@ WebMidi.enable(function(err) {
               logg("looping: " + note[vv] + " every 4n for " + loops.src[vv]);
             }, "4n");
           }
-        }
+        } else { green(vv); }
       }
       else if (vv == 64) {
         setUpNoteGrid(++noteStep);
