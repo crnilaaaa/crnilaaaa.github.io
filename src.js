@@ -145,7 +145,7 @@ WebMidi.enable(function(err) {
     for (var i = 0; i < 64; i++) {
       output.send(0x90, [light_state[i] = 0, 0]);
     }
-  }
+  };
 
   input.addListener('noteon', 'all',
     function(e) {
