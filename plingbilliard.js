@@ -103,6 +103,8 @@ WebMidi.enable(function(err) {
       var ll = light_state;
       if (vv == 98) 
         logg("toggled: " + (toggled = true));
+      // messyyyy :( 
+      // gotta sort the toggle better etc
       if (vv < 64) {        
         if (toggled) {
           togglecheck(vv);
@@ -117,6 +119,15 @@ WebMidi.enable(function(err) {
           green(vv); 
           synth.triggerAttack(note[vv]);
           logg("playing " + note[vv] + " triggered by " + vv );
+        }
+      }
+      else if (toggled && 63 < vv < 68) {
+        switch(vv) {
+          case 64: ++ystep; break;
+          case 65: --ystep; break;
+          case 66: ++xstep; break;
+          case 67: ++ystep; break;
+          default: break;
         }
       }
       else if (vv == 64) {
@@ -136,17 +147,6 @@ WebMidi.enable(function(err) {
       else if (vv == 67) {
         logg("octave range: " + (++octaveRange));
         setUpNoteGrid(noteStep);
-      }
-      // messyyyy :( 
-      // gotta sort the toggle better etc
-      else if (toggled && 63 < vv < 68) {
-        switch(vv) {
-          case 64: ++ystep; break;
-          case 65: --ystep; break;
-          case 66: ++xstep; break;
-          case 67: ++ystep; break;
-          default: break;
-        }
       }
     }
   );
