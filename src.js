@@ -146,10 +146,11 @@ WebMidi.enable(function(err) {
   input.addListener('noteon', 'all',
     function(e) {
       console.log("noteon " + e.note.name + e.note.octave);
-      var noteval;
-      output.send(0x90, [e.data[1], light_state[e.data[1]]++]);
-      if (light_state[e.data[1]] > 5) { light_state[e.data[1]] = 0; }
-      document.getElementById("checkbox" + i).indeterminate = light_state[e.data[1]] != 0 ? 1 : 0;
+      var vv = e.data[1];
+      var ll = light_state;
+      output.send(0x90, [vv, ll[vv]++]);
+      if (ll[vv] > 5) { ll[vv] = 0; }
+      document.getElementById("checkbox" + vv).indeterminate = ll[vv] != 0 ? true : false; // ??
     }
   );
 });
