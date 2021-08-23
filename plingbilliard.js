@@ -93,11 +93,11 @@ WebMidi.enable(function(err) {
         green(vv);
         togglecheck(vv);
         synth.triggerAttack(note[vv]);
-        log("playing " + note[vv] + " triggered by " + vv );
+        logg("playing " + note[vv] + " triggered by " + vv );
       }
       else if (vv == 64) {
         setUpNoteGrid(++noteStep);
-        log("notestep: " + noteStep);
+        logg("notestep: " + noteStep);
       }
       else if (vv == 65) {
         if (noteStep > 0) {
