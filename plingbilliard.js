@@ -2,7 +2,7 @@ WebMidi.enable(function(err) {
   if(err) {
     console.log("blerg", err);
   }
-  var synth = new Tone.PolySynth().toDestionation();
+  var synth = new Tone.PolySynth().toDestination();
   var input = WebMidi.inputs[2];
   var output = WebMidi.outputs[2];
   var light_state = [];
