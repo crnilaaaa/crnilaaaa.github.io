@@ -30,7 +30,7 @@ var note =
   function setUpNoteGrid() {
     var i = 0;
     var scale = (step = 1) => {
-      return ["C", "D", "E", "F", "G", "A", "B"][i++%8];
+      return ["C", "D", "E", "F", "G", "A", "B"][i++%7];
     }
     for(var i = 0; i < 64; ++i) {
        note[i] = scale() + "4"; 
