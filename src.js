@@ -143,7 +143,7 @@ WebMidi.enable(function(err) {
   for (var i = 0; i < 64; i++) { light_state[i] = 0 };
   var allOff = () => {
     for (var i = 0; i < 64; i++) {
-      output.send(0x90, [light_state[i] = 0, 0]);
+      output.send(0x90, [i, light_state[i] = 0]);
     }
   };
 
