@@ -28,8 +28,8 @@ var note =
              0  2  4  5  7  9 11 12 */
   
   function setUpNoteGrid() {
+    var i = 0;
     var scale = (step = 1) => {
-      let i = 0;
       return ["C", "D", "E", "F", "G", "A", "B"][i++%8];
     }
     for(var i = 0; i < 64; ++i) {
