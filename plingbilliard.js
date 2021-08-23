@@ -29,10 +29,10 @@ WebMidi.enable(function(err) {
              0  2  4  5  7  9 11 12 */
   
   function setUpNoteGrid(step = 1) {
-    var i = 0;
+    var __scalePosition = 0
     var scale = (step = 1) => {
-      i += step;
-      return ["C", "D", "E", "F", "G", "A", "B"][i%7];
+      __scalePosition += step;
+      return ["C", "D", "E", "F", "G", "A", "B"][__scalePosition % 7];
     }
     for(var i = 0; i < 64; ++i) {
        note[i] = scale(step) + "4"; 
