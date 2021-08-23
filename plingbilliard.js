@@ -40,5 +40,6 @@ WebMidi.enable(function(err) {
 });
 
 function doStart() {
+  Tone.start();
   Tone.Transport.start();  
 }
