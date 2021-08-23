@@ -138,7 +138,6 @@ WebMidi.enable(function(err) {
     xstepLoop.stop();
     xstepLoop.dispose(); // vOv
   }
-  logg(
   xstepLoop = new Tone.Loop((time) => {
       logg("xsteploop");
       if(triggers[position]) {
@@ -150,13 +149,12 @@ WebMidi.enable(function(err) {
         synth.triggerAttack(note[position]);
       }
       green(position);
-      }, stepkinds[xstep]).start(0));
+      }, stepkinds[xstep]).start(0);
   if(ystepLoop) {
     ystepLoop.stop();
     ystepLoop.dispose();
   }
-  logg(
-    ystepLoop = new Tone.Loop((time) => {
+  ystepLoop = new Tone.Loop((time) => {
       logg("ysteploop");
       if(triggers[position]) {
         synth.triggerRelease(note[position]);
@@ -167,7 +165,7 @@ WebMidi.enable(function(err) {
         synth.triggerAttack(note[position]);
       }
       green(position);
-    }, stepkinds[ystep]).start(0));
+  }, stepkinds[ystep]).start(0);
 
   input.addListener('noteon', 'all',
     function(e) {
