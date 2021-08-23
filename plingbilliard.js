@@ -40,7 +40,9 @@ function setUpNoteGrid(root = 48, step = 1) {
         case 8:
         case 10:
           note[i]++;
-        default: break;
+        default: 
+          note[i] += 48;
+          break;
       }
     }
   }
