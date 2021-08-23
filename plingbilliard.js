@@ -21,8 +21,8 @@ WebMidi.enable(function(err) {
   
   var octaveRange = 0;
   var noteStep = 1;
-  var xstep = 0;
-  var ystep = 0;
+  var xstep = 1;
+  var ystep = 1;
   var note = 
    [0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 
@@ -88,6 +88,32 @@ WebMidi.enable(function(err) {
   var ystepLoop; 
   var toggled = false;
   var triggers = [];
+
+  function xStep() {
+    logg("xstep");
+    if(triggers[position]) {
+      synth.triggerRelease(note[position]);
+      red(position);
+    }
+    position += xstep;
+    if(triggers[position]) {
+      synth.triggerAttack(note[position]);
+    }
+    green(position);
+  }
+
+  function yStep() {
+    logg("ystep");
+    if(triggers[position]) {
+      synth.triggerRelease(note[position]);
+      red(position);
+    }
+    position += ystep * 8;
+    if(triggers[position]) {
+      synth.triggerAttack(note[position]);
+    }
+    green(position);
+  }
   
   input.addListener('noteoff', 'all', function(e) { 
     if (e.data[1] < 64) { 
@@ -97,76 +123,10 @@ WebMidi.enable(function(err) {
     }
     if (e.data[1] == 98) {
       logg("toggled: " + (toggled = false));
-      if(xstepLoop) {
-        xstepLoop.stop();
-        xstepLoop.dispose(); // vOv
-      }
-      xstepLoop = new Tone.Loop((time) => {
-          if(triggers[position]) {
-            synth.triggerRelease(note[position]);
-            red(position);
-          }
-          position += xstep;
-          position = position > 63 ? position - 64 : position;
-          position = position < 0 ? position + 64 : position;
-          if(triggers[position]) {
-            synth.triggerAttack(note[position]);
-            green(position);
-          }
-        }, stepkinds[xstep]).start();
-      if(ystepLoop) {
-        ystepLoop.stop();
-        ystepLoop.dispose();
-      }
-        ystepLoop = new Tone.Loop((time) => {
-          if(triggers[position]) {
-            synth.triggerRelease(note[position]);
-            red(position);
-          }
-          position += ystep * 8;
-          position = position > 63 ? position - 64 : position;
-          position = position < 0 ? position + 64 : position;
-          if(triggers[position]) {
-            synth.triggerAttack(note[position]);
-            green(position);
-          }
-        }, stepkinds[ystep]).start();
+      
     }
   });
   
-  if(xstepLoop) {
-    xstepLoop.stop();
-    xstepLoop.dispose(); // vOv
-  }
-  xstepLoop = new Tone.Loop((time) => {
-      logg("xsteploop");
-      if(triggers[position]) {
-        synth.triggerRelease(note[position]);
-        red(position);
-      }
-      position += xstep;
-      if(triggers[position]) {
-        synth.triggerAttack(note[position]);
-      }
-      green(position);
-      }, stepkinds[xstep]).start(0);
-  if(ystepLoop) {
-    ystepLoop.stop();
-    ystepLoop.dispose();
-  }
-  ystepLoop = new Tone.Loop((time) => {
-      logg("ysteploop");
-      if(triggers[position]) {
-        synth.triggerRelease(note[position]);
-        red(position);
-      }
-      position += ystep * 8;
-      if(triggers[position]) {
-        synth.triggerAttack(note[position]);
-      }
-      green(position);
-  }, stepkinds[ystep]).start(0);
-
   input.addListener('noteon', 'all',
     function(e) {
       var vv = e.data[1];
