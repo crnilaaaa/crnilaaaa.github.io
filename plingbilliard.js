@@ -72,7 +72,7 @@ const click = new Tone.Loop(time => {
     function(e) { 
       off(e.data[1]); 
       if (e.data[1] < 64) { 
-        synth.triggerRelease(e.data[1]);
+        synth.triggerRelease(note[e.data[1]]);
       }
   });
   input.addListener('noteon', 'all',
