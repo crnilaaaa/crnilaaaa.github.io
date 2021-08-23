@@ -132,6 +132,39 @@ WebMidi.enable(function(err) {
     }
   });
   
+  if(xstepLoop) {
+    xstepLoop.stop();
+    xstepLoop.dispose(); // vOv
+  }
+  logg(
+  xstepLoop = new Tone.Loop((time) => {
+      if(triggers[position]) {
+        synth.triggerRelease(note[position]);
+        red(position);
+      }
+      position += xstep;
+      if(triggers[position]) {
+        synth.triggerAttack(note[position]);
+      }
+      green(position);
+      }, stepkinds[xstep]).start(0));
+  if(ystepLoop) {
+    ystepLoop.stop();
+    ystepLoop.dispose();
+  }
+  logg(
+    ystepLoop = new Tone.Loop((time) => {
+      if(triggers[position]) {
+        synth.triggerRelease(note[position]);
+        red(position);
+      }
+      position += ystep * 8;
+      if(triggers[position]) {
+        synth.triggerAttack(note[position]);
+      }
+      green(position);
+    }, stepkinds[ystep]).start(0));
+
   input.addListener('noteon', 'all',
     function(e) {
       var vv = e.data[1];
