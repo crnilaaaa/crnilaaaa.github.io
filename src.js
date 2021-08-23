@@ -148,7 +148,8 @@ WebMidi.enable(function(err) {
       console.log("noteon " + e.note.name + e.note.octave);
       var vv = e.data[1];
       var ll = light_state;
-      if (++ll[vv] > 5) { ll[vv] = 0; }
+      ll[vv]++;
+      if(ll[vv] > 5) { ll[vv] = 0 };
       document.getElementById("checkbox" + vv).indeterminate = ll[vv] != 0 ? true : false; // ??
       output.send(0x90, [vv, ll[vv]]);
     }
