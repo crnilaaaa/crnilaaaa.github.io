@@ -152,4 +152,5 @@ navigator.mediaDevices.getUserMedia(constraints).then(handleSuccess).catch(handl
         if (light_state[e.data[1]] > 5) { light_state[e.data[1]] = 0; }
         document.getElementById("checkbox" + i).indeterminate = light_state[e.data[1]] != 0 ? 1 : 0;
       }
+    );
   });
