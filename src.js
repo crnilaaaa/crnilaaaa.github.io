@@ -144,6 +144,7 @@ WebMidi.enable(function(err) {
   var allOff = () => {
     for (var i = 0; i < 64; i++) {
       output.send(0x90, [i, light_state[i] = 0]);
+      document.getElementById("checkbox" + i).indeterminate = false; // ??
     }
   };
 
