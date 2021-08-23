@@ -81,6 +81,10 @@ WebMidi.enable(function(err) {
       synth.triggerRelease(note[e.data[1]]);
       togglecheck(e.data[1]);
       logg("stopping " + note[e.data[1]] + " triggered by " + e.data[1] );
+      if(toggled) {
+        loops.src[e.data[1]] = "";
+        logg("unlooping " + note[e.data[1]]);
+      }
     }
     if (e.data[1] == 98) {
       logg("toggled: " + (toggled = false));
@@ -107,7 +111,6 @@ WebMidi.enable(function(err) {
           if(loops.src[vv]) {
             loops.src[vv] = "";
           } else {
-            red(vv);
             loops.src[vv] = "8n";
             logg("prelooping: " + note[vv] + " every 4n for " + loops.src[vv]);
             loops.obj[vv] = new Tone.Loop((time) => {
@@ -115,6 +118,7 @@ WebMidi.enable(function(err) {
               logg("looping: " + note[vv] + " every 4n for " + loops.src[vv]);
             }, "4n");
           }
+          red(vv);
         } else { green(vv); }
       }
       else if (vv == 64) {
