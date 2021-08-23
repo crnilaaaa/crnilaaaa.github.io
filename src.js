@@ -149,8 +149,8 @@ WebMidi.enable(function(err) {
       var vv = e.data[1];
       var ll = light_state;
       document.getElementById("checkbox" + vv).indeterminate = ll[vv] != 0 ? true : false; // ??
-      if (ll[vv] > 5) { ll[vv] = 0; }
-      output.send(0x90, [vv, ll[vv]++]);
+      output.send(0x90, [vv, ll[vv]]);
+      if (++ll[vv] > 5) { ll[vv] = 0; }
     }
   );
 });
