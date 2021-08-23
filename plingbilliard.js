@@ -49,6 +49,7 @@ function setUpNoteGrid(root = 48, step = 1) {
 }
 
 setUpNoteGrid();
+console.log(note);
   
 var green = (btn) => { output.send(0x90, [btn, light_state[btn] = 1]); };
 var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 2]); };
@@ -75,19 +76,20 @@ const click = new Tone.Loop(time => {
       off(e.data[1]); 
       if (e.data[1] < 64) { 
         synth.triggerRelease(note[e.data[1]]);
+        console.log("stopping " + note[e.data[1]] + " triggered by " + vv );
       }
   });
   input.addListener('noteon', 'all',
     function(e) {
       var vv = e.data[1];
       var ll = light_state;
-      console.log("noteon " + e.note.name + e.note.octave, e.data);
       if (vv == 98) 
         allOff();
       else if (vv < 64) {
         green(vv);
         document.getElementById("checkbox" + vv).checked = ll[vv] != 0 ? true : false; // ??  
         synth.triggerAttack(note[vv]);
+        console.log("playing " + note[vv] + " triggered by " + vv );
       }
     }
   );
