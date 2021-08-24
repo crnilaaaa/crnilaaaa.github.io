@@ -50,8 +50,9 @@ WebMidi.enable(function(err) {
   var elem = document.getElementById("devicenumber");
   logg(elem);
   elem.onchange = (e) => {
-    input = WebMidi.inputs[e.value];
-    output = WebMidi.outputs[e.value];
+    var newval = document.getElementById("devicenumber").value
+    input = WebMidi.inputs[newval];
+    output = WebMidi.outputs[newval];
     logg("changed device: " + e);
   };
   var light_state = [];
