@@ -52,7 +52,7 @@ WebMidi.enable(function(err) {
   elem.onchange = (e) => {
     input = WebMidi.inputs[e.value];
     output = WebMidi.outputs[e.value];
-    logg("changed device: " + e.value);
+    logg("changed device: " + e);
   };
   var light_state = [];
   var position = 0;
