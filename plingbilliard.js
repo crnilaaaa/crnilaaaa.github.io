@@ -13,8 +13,8 @@ function doStart() {
 
     var amenchops;
     function make_amen() {
-      for (var i = 1; i < 17; ++i) {
-        amenchops[amenchops.length] = new Wad({source: `amen${i}.wav`});
+      for (var i = 0; i < 16; ++i) {
+        amenchops[amenchops.length] = new Wad({source: `amen${i + 1}.wav`});
       }
     }
 
