@@ -132,16 +132,16 @@ WebMidi.enable(function(err) {
     if (toggled && 63 < e.data[1] < 68) {
       off(e.data[1]);
       switch(e.data[1]) {
-        case 64: if (ystepLoop) ystepLoop.stop(); ystepLoop.dispose(); 
+        case 64: if (ystepLoop) ystepLoop.stop(), ystepLoop.dispose(); 
           ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); 
           break;
-        case 65: if (ystepLoop) ystepLoop.stop; ystepLoop.dispose();
+        case 65: if (ystepLoop) ystepLoop.stop, ystepLoop.dispose();
           ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); 
           break;
-        case 66: if (xstepLoop) xstepLoop.stop; xstepLoop.dispose();
+        case 66: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
           xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); 
           break;
-        case 67: if (xstepLoop) xstepLoop.stop; xstepLoop.dispose();
+        case 67: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
           xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); 
           break;
       }
