@@ -12,10 +12,8 @@ function doStart() {
     }
 
     var amenchops;
-    function make_amen() {
-      for (var i = 0; i < 16; ++i) {
-        amenchops[amenchops.length] = new Wad({source: `amen${i + 1}.wav`});
-      }
+    for (var i = 0; i < 16; ++i) {
+      amenchops[amenchops.length] = new Wad({source: `amen${i + 1}.wav`});
     }
 
     var octaveRange = 0;
