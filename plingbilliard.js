@@ -23,6 +23,7 @@ WebMidi.enable(function(err) {
     0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0];
   const stepkinds = [
+    "0",
     "1n",
     "2n",
     "2n.",
@@ -111,7 +112,7 @@ WebMidi.enable(function(err) {
       synth.triggerRelease(note[position]);
       red(position);
     } else { off(position); }
-    position++;
+    position += 8;
     position = position % 64;
     position = position < 0 ? position + 64 : position;
     if(triggers[position]) {
@@ -123,8 +124,8 @@ WebMidi.enable(function(err) {
   input.addListener('noteoff', 'all', function(e) { 
     if (e.data[1] < 64) { 
       synth.triggerRelease(note[e.data[1]]);
-      if (!toggled) off(e.data[1]);
       if (triggers[e.data[1]]) red(e.data[1]);
+      if (!toggled) off(e.data[1]);
     }
     if (e.data[1] == 98) {
       logg("toggled: " + (toggled = false));
