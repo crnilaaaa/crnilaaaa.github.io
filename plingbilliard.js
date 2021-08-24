@@ -135,17 +135,15 @@ WebMidi.enable(function(err) {
     if (toggled && 63 < e.data[1] < 68) {
       off(e.data[1]);
       switch(e.data[1]) {
-        case 64: if (ystepLoop) ystepLoop.stop(), ystepLoop.dispose(); 
-          ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start("0:0:0"); 
-          break;
+        case 64: 
         case 65: if (ystepLoop) ystepLoop.stop, ystepLoop.dispose();
-          ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start("0:0:0"); 
+          ystepLoop = new Tone.Loop((time) => { yStep(); }, 
+            stepkinds[ystep]).start(Tone.now + (new Tone.Time(ystep)).quantize(ystep));
           break;
-        case 66: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
-          xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start("0:0:0"); 
-          break;
+        case 66: 
         case 67: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
-          xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start("0:0:0"); 
+          xstepLoop = new Tone.Loop((time) => { xStep(); }, 
+            stepkinds[xstep]).start(Tone.now + (new Tone.Time(xstep)).quantize(xstep));
           break;
       }
     }
