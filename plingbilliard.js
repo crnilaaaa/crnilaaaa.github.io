@@ -134,16 +134,16 @@ WebMidi.enable(function(err) {
       off(e.data[1]);
       switch(e.data[1]) {
         case 64: if (ystepLoop) ystepLoop.stop(), ystepLoop.dispose(); 
-          ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); 
+          ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start("0:0:0"); 
           break;
         case 65: if (ystepLoop) ystepLoop.stop, ystepLoop.dispose();
-          ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start(); 
+          ystepLoop = new Tone.Loop((time) => { yStep(); }, stepkinds[ystep]).start("0:0:0"); 
           break;
         case 66: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
-          xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); 
+          xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start("0:0:0"); 
           break;
         case 67: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
-          xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start(); 
+          xstepLoop = new Tone.Loop((time) => { xStep(); }, stepkinds[xstep]).start("0:0:0"); 
           break;
       }
     }
