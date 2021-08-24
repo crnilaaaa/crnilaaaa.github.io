@@ -77,7 +77,7 @@ WebMidi.enable(function(err) {
     note[0] = "C3";
     for(var i = 1; i < 64; ++i) {
       note[i] = scale(step) + octave;
-      document.getElementById("textbox" + i).text = note[i];
+      document.getElementById("textbox" + i).value = note[i];
     }
   }
  
