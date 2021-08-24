@@ -2,30 +2,17 @@ function logg(text) {
   document.getElementById("log").prepend(text + "\n");
 }
 
-var xstepLoop;
-var ystepLoop;
-
 WebMidi.enable(function(err) {
   if(err) {
     logg("blerg", err);
   }
-  var synth = new Tone.PolySynth({ release: .1 }).toDestination();
-  var input = WebMidi.inputs[2];
-  var output = WebMidi.outputs[2];
-  var light_state = [];
-  var position = 0;
-  for (var i = 0; i < 64; i++) { light_state[i] = 0 };
-  var allOff = () => {
-    for (var i = 0; i < 64; i++) {
-      output.send(0x90, [i, light_state[i] = 0]);
-      document.getElementById("checkbox" + i).indeterminate = false; // ??
-    }
-  };
-  
+
+  var xstepLoop;
+  var ystepLoop;
   var octaveRange = 0;
   var noteStep = 1;
-  var xstep = 1;
-  var ystep = 1;
+  var xstep = 0;
+  var ystep = 0;
   var note = 
    [0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 
@@ -35,9 +22,6 @@ WebMidi.enable(function(err) {
     0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0];
-
-  /* C major: 48 50 52 53 55 57 59 60
-             0  2  4  5  7  9 11 12 */
   const stepkinds = [
     "1n",
     "2n",
@@ -57,6 +41,22 @@ WebMidi.enable(function(err) {
     "32t",
     "64n"
     ];
+
+  var synth = new Tone.PolySynth({ release: .1 }).toDestination();
+  var input = WebMidi.inputs[2];
+  var output = WebMidi.outputs[2];
+  var light_state = [];
+  var position = 0;
+  for (var i = 0; i < 64; i++) { light_state[i] = 0 };
+  var allOff = () => {
+    for (var i = 0; i < 64; i++) {
+      output.send(0x90, [i, light_state[i] = 0]);
+      document.getElementById("checkbox" + i).indeterminate = false; // ??
+    }
+  };
+  
+  /* C major: 48 50 52 53 55 57 59 60
+             0  2  4  5  7  9 11 12 */
   
   function setUpNoteGrid(step = 1) {
     var __scalePosition = 0;
@@ -96,7 +96,7 @@ WebMidi.enable(function(err) {
       synth.triggerRelease(note[position]);
       red(position);
     } else { off(position); }
-    position += xstep;
+    position++;
     position = position % 64;
     position = position < 0 ? position + 64 : position;
     if(triggers[position]) {
@@ -111,7 +111,7 @@ WebMidi.enable(function(err) {
       synth.triggerRelease(note[position]);
       red(position);
     } else { off(position); }
-    position += ystep * 8;
+    position++;
     position = position % 64;
     position = position < 0 ? position + 64 : position;
     if(triggers[position]) {
