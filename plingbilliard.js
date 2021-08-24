@@ -155,13 +155,15 @@ function doStart() {
           case 65: if (ystepLoop) ystepLoop.stop, ystepLoop.dispose();
             document.getElementById("ysteptextbox").value = ystep;
             ystepLoop = new Tone.Loop((time) => { yStep(); }, 
-              stepkinds[Math.abs(ystep)]).start(Tone.now() + (new Tone.Time(ystep)).quantize(ystep));
+              stepkinds[Math.abs(ystep)]).start(Tone.now() + 
+                (new Tone.Time(Math.abs(ystep))).quantize(stepkinds[ystep]));
             break;
           case 66: 
           case 67: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
             document.getElementById("xsteptextbox").value = xstep;
             xstepLoop = new Tone.Loop((time) => { xStep(); }, 
-              stepkinds[Math.abs(xstep)]).start(Tone.now() + (new Tone.Time(xstep)).quantize(xstep));
+              stepkinds[Math.abs(xstep)]).start(Tone.now() +
+                (new Tone.Time(Math.abs(xstep))).quantize(stepkinds[xstep]));
             break;
         }
       }
