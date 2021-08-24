@@ -47,6 +47,7 @@ WebMidi.enable(function(err) {
   var input = WebMidi.inputs[document.getElementById("devicenumber").value];
   var output = WebMidi.outputs[document.getElementById("devicenumber").value];
   document.getElementById("devicenumber").on('change', (e) => { 
+    logg("new in/out: " + e.value);
     input = WebMidi.inputs[e.value]; 
     output = WebMidi.outputs[e.value]; 
   });
