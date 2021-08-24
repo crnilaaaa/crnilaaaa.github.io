@@ -46,7 +46,7 @@ WebMidi.enable(function(err) {
   var synth = new Tone.PolySynth({ release: .1 }).toDestination();
   var input = WebMidi.inputs[document.getElementById("devicenumber").value];
   var output = WebMidi.outputs[document.getElementById("devicenumber").value];
-  document.getElementById("devicenumber").on('change', (e) => { 
+  document.getElementById("devicenumber").onchange((e) => { 
     logg("new in/out: " + e.value);
     input = WebMidi.inputs[e.value]; 
     output = WebMidi.outputs[e.value]; 
