@@ -2,7 +2,7 @@ function logg(text) {
   document.getElementById("log").prepend(text + "\n");
 }
 
-WebMidi.enable(function(err) {
+WebMidi.enable(function(err) {x
   if(err) {
     logg("blerg", err);
   }
@@ -137,11 +137,13 @@ WebMidi.enable(function(err) {
       switch(e.data[1]) {
         case 64: 
         case 65: if (ystepLoop) ystepLoop.stop, ystepLoop.dispose();
+          document.getElementById("ysteptextbox").value = ystep;
           ystepLoop = new Tone.Loop((time) => { yStep(); }, 
             stepkinds[ystep]).start(Tone.now + (new Tone.Time(ystep)).quantize(ystep));
           break;
         case 66: 
         case 67: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
+          document.getElementById("xsteptextbox").value = xstep;
           xstepLoop = new Tone.Loop((time) => { xStep(); }, 
             stepkinds[xstep]).start(Tone.now + (new Tone.Time(xstep)).quantize(xstep));
           break;
@@ -185,7 +187,7 @@ WebMidi.enable(function(err) {
         xstep = xstep == stepkinds.length ? stepkinds.length - 1 : xstep
         ystep = ystep < 0 ? 0 : ystep;
         ystep = ystep == stepkinds.length ? stepkinds.length - 1 : ystep
-        logg("xstep: " + xstep + " " + stepkinds[xstep] + "  ystep: " + ystep + stepkinds[ystep]);
+        logg("xstep: " + xstep + " " + stepkinds[xstep] + "  ystep: " + ystep + " " + stepkinds[ystep]);
       }
       else if (vv == 64) {
         setUpNoteGrid(++noteStep);
