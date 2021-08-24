@@ -5,10 +5,17 @@ function logg(text) {
 function doStart() {
   Tone.start();
   Tone.Transport.start();
-
+  
   WebMidi.enable(function(err) {
     if(err) {
       logg("blerg", err);
+    }
+
+    var amenchops;
+    function make_amen() {
+      for (var i = 1; i < 17; ++i) {
+        amenchops[amenchops.length] = new Wad({source: `amen${i}.wav`});
+      }
     }
 
     var octaveRange = 0;
@@ -109,7 +116,7 @@ function doStart() {
     function xStep() {
       logg("xstep");
       if(triggers[position]) {
-        synth.triggerRelease(note[position]);
+        // synth.triggerRelease(note[position]);
         red(position);
       } else { off(position) }
       var ypos = Math.floor(position / 8);
@@ -118,7 +125,8 @@ function doStart() {
       position = position < 0 ? position + 8 : position;
       position += 8 * ypos;
       if(triggers[position]) {
-        synth.triggerAttack(note[position]);
+        // synth.triggerAttack(note[position]);
+        amenchops[position % 16].play();
       }
       green(position);
     }
@@ -126,21 +134,22 @@ function doStart() {
     function yStep() {
       logg("ystep");
       if(triggers[position]) {
-        synth.triggerRelease(note[position]);
+        // synth.triggerRelease(note[position]);
         red(position);
       } else { off(position) }
       ystep > 0 ? position += 8 : position -= 8;
       position = position % 64;
       position = position < 0 ? position + 64 : position;
       if(triggers[position]) {
-        synth.triggerAttack(note[position]);
+        // synth.triggerAttack(note[position]);
+        amenchops[position % 16].play();
       }
       green(position);
     }
 
     input.addListener('noteoff', 'all', function(e) { 
       if (e.data[1] < 64) { 
-        synth.triggerRelease(note[e.data[1]]);
+        // synth.triggerRelease(note[e.data[1]]);
         if (triggers[e.data[1]]) red(e.data[1]);
         if (!toggled) off(e.data[1])
         else red(e.data[1]);
@@ -188,7 +197,8 @@ function doStart() {
             }
           } else { 
             green(vv); 
-            synth.triggerAttack(note[vv]);
+            //synth.triggerAttack(note[vv]);
+            amenchops[vv % 16].play()
             logg("playing " + note[vv] + " triggered by " + vv );
           }
         }
