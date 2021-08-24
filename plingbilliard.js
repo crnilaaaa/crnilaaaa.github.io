@@ -61,20 +61,21 @@ WebMidi.enable(function(err) {
   
   function setUpNoteGrid(step = 1) {
     var __scalePosition = 0;
-    var octave = 3;
+    var octave = 4;
     var scale = (step = 1) => {
       __scalePosition += step;
       if (__scalePosition >= 7) {
         octave++;
         __scalePosition -= 7
       }
-      if (octave > octaveRange + 3) {
+      if (octave > octaveRange + 4) {
         octave = 3; 
       }
       return ["C", "D", "E", "F", "G", "A", "B"][__scalePosition];
     }
     
-    note[0] = "C3";
+    note[0] = "C4";
+    document.getElementById("textbox" +i).value = note[i];
     for(var i = 1; i < 64; ++i) {
       note[i] = scale(step) + octave;
       document.getElementById("textbox" + i).value = note[i];
