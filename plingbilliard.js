@@ -44,8 +44,8 @@ WebMidi.enable(function(err) {
     ];
 
   var synth = new Tone.PolySynth({ release: .1 }).toDestination();
-  var input = WebMidi.inputs[2];
-  var output = WebMidi.outputs[2];
+  var input = WebMidi.inputs[document.getElementById("devicenumber")];
+  var output = WebMidi.outputs[document.getElementById("devicenumber")];
   var light_state = [];
   var position = 0;
   for (var i = 0; i < 64; i++) { light_state[i] = 0 };
