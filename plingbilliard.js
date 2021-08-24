@@ -112,8 +112,8 @@ function doStart() {
         synth.triggerRelease(note[position]);
         red(position);
       } else { off(position); }
-      xstep > 0 ? position++ : position--;
       var ypos = position / 8;
+      xstep > 0 ? position++ : position--;
       position = position % 8;
       position = position < 0 ? position + 8 : position;
       position += 8 * ypos;
@@ -156,13 +156,13 @@ function doStart() {
           case 65: if (ystepLoop) ystepLoop.stop, ystepLoop.dispose();
             document.getElementById("ysteptextbox").value = ystep;
             ystepLoop = new Tone.Loop((time) => { yStep(); }, 
-              stepkinds[ystep]).start(Tone.now() + (new Tone.Time(ystep)).quantize(ystep));
+              stepkinds[Math.abs(ystep)]).start(Tone.now() + (new Tone.Time(ystep)).quantize(ystep));
             break;
           case 66: 
           case 67: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
             document.getElementById("xsteptextbox").value = xstep;
             xstepLoop = new Tone.Loop((time) => { xStep(); }, 
-              stepkinds[xstep]).start(Tone.now() + (new Tone.Time(xstep)).quantize(xstep));
+              stepkinds[Math.Abs(xstep)]).start(Tone.now() + (new Tone.Time(xstep)).quantize(xstep));
             break;
         }
       }
@@ -200,10 +200,10 @@ function doStart() {
             case 67: ++xstep; break;
             default: break;
           }
-          xstep = xstep == -stepkinds.length ? -stepkinds.length : xstep;
-          xstep = xstep ==  stepkinds.length ? stepkinds.length - 1 : xstep
-          ystep = ystep == -stepkinds.length ? -stepkinds.length : ystep;
-          ystep = ystep ==  stepkinds.length ? stepkinds.length - 1 : ystep;
+          xstep = xstep <= -stepkinds.length ? -stepkinds.length : xstep;
+          xstep = xstep >=  stepkinds.length ? stepkinds.length - 1 : xstep
+          ystep = ystep <= -stepkinds.length ? -stepkinds.length : ystep;
+          ystep = ystep >=  stepkinds.length ? stepkinds.length - 1 : ystep;
           logg("xstep: " + xstep + " " + stepkinds[Math.abs(xstep)] + "  ystep: " + ystep + " " + stepkinds[Math.abs(ystep)]);
         }
         else if (vv == 64) {
