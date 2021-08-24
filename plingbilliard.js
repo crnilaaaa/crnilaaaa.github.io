@@ -113,8 +113,8 @@ function doStart() {
         red(position);
       } else { off(position); }
       var ypos = position / 8;
-      xstep > 0 ? position++ : position--;
       position = position % 8;
+      xstep > 0 ? position++ : position--;
       position = position < 0 ? position + 8 : position;
       position += 8 * ypos;
       if(triggers[position]) {
@@ -130,7 +130,6 @@ function doStart() {
         red(position);
       } else { off(position); }
       ystep > 0 ? position += 8 : position -= 8;
-      position = position < 0 ? position + 64 : position;
       position = position % 64;
       position = position < 0 ? position + 64 : position;
       if(triggers[position]) {
