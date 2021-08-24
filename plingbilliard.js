@@ -11,12 +11,8 @@ function doStart() {
       logg("blerg", err);
     }
 
-    var xstepLoop;
-    var ystepLoop;
     var octaveRange = 0;
     var noteStep = 1;
-    var xstep = 0;
-    var ystep = 0;
     var note = 
      [0, 0, 0, 0, 0, 0, 0, 0, 
       0, 0, 0, 0, 0, 0, 0, 0, 
@@ -26,6 +22,12 @@ function doStart() {
       0, 0, 0, 0, 0, 0, 0, 0,
       0, 0, 0, 0, 0, 0, 0, 0, 
       0, 0, 0, 0, 0, 0, 0, 0];
+    var xstepLoop;
+    var ystepLoop;
+    var xstep = 0;
+    var ystep = 0;
+    var negxstep = false;
+    var negystep = false;
     const stepkinds = [
       "0",
       "1n",
@@ -46,7 +48,6 @@ function doStart() {
       "32t",
       "64n"
       ];
-
     var synth = new Tone.PolySynth({ release: .1 }).toDestination();
     var input = WebMidi.inputs[document.getElementById("devicenumber").value];
     var output = WebMidi.outputs[document.getElementById("devicenumber").value];
@@ -111,9 +112,11 @@ function doStart() {
         synth.triggerRelease(note[position]);
         red(position);
       } else { off(position); }
-      position++;
-      position = position % 64;
-      position = position < 0 ? position + 64 : position;
+      xstep > 0 ? position++ : position--;
+      var ypos = position / 8;
+      position = position % 8;
+      position = position < 0 ? position + 8 : position;
+      position += 8 * ypos;
       if(triggers[position]) {
         synth.triggerAttack(note[position]);
       }
@@ -126,7 +129,8 @@ function doStart() {
         synth.triggerRelease(note[position]);
         red(position);
       } else { off(position); }
-      position += 8;
+      ystep > 0 ? position += 8 : position -= 8;
+      position = position < 0 ? position + 64 : position;
       position = position % 64;
       position = position < 0 ? position + 64 : position;
       if(triggers[position]) {
@@ -196,11 +200,11 @@ function doStart() {
             case 67: ++xstep; break;
             default: break;
           }
-          xstep = xstep < 0 ? 0 : xstep;
-          xstep = xstep == stepkinds.length ? stepkinds.length - 1 : xstep
-          ystep = ystep < 0 ? 0 : ystep;
-          ystep = ystep == stepkinds.length ? stepkinds.length - 1 : ystep
-          logg("xstep: " + xstep + " " + stepkinds[xstep] + "  ystep: " + ystep + " " + stepkinds[ystep]);
+          xstep = xstep == -stepkinds.length ? -stepkinds.length : xstep;
+          xstep = xstep ==  stepkinds.length ? stepkinds.length - 1 : xstep
+          ystep = ystep == -stepkinds.length ? -stepkinds.length : ystep;
+          ystep = ystep ==  stepkinds.length ? stepkinds.length - 1 : ystep;
+          logg("xstep: " + xstep + " " + stepkinds[Math.abs(xstep)] + "  ystep: " + ystep + " " + stepkinds[Math.abs(ystep)]);
         }
         else if (vv == 64) {
           setUpNoteGrid(++noteStep);
