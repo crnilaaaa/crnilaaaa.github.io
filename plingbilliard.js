@@ -162,7 +162,7 @@ function doStart() {
           case 67: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
             document.getElementById("xsteptextbox").value = xstep;
             xstepLoop = new Tone.Loop((time) => { xStep(); }, 
-              stepkinds[Math.Abs(xstep)]).start(Tone.now() + (new Tone.Time(xstep)).quantize(xstep));
+              stepkinds[Math.abs(xstep)]).start(Tone.now() + (new Tone.Time(xstep)).quantize(xstep));
             break;
         }
       }
