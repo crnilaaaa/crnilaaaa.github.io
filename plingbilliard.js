@@ -11,7 +11,7 @@ function doStart() {
       logg("blerg", err);
     }
 
-    var amenchops;
+    var amenchops = [];
     for (var i = 0; i < 16; ++i) {
       amenchops[amenchops.length] = new Wad({source: `amen${i + 1}.wav`});
     }
