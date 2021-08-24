@@ -125,7 +125,8 @@ WebMidi.enable(function(err) {
     if (e.data[1] < 64) { 
       synth.triggerRelease(note[e.data[1]]);
       if (triggers[e.data[1]]) red(e.data[1]);
-      if (!toggled) off(e.data[1]);
+      if (!toggled) off(e.data[1])
+      else red(e.data[1]);
     }
     if (e.data[1] == 98) {
       logg("toggled: " + (toggled = false));
