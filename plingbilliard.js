@@ -49,9 +49,10 @@ WebMidi.enable(function(err) {
   logg(input.value + " i/o " + output + "  " + document.getElementById("devicenumber").value);
   var elem = document.getElementById("devicenumber");
   logg(elem);
-/*elem.onchange((e) => {
-    logg("???");
-  }); */
+  elem.onchange = (e) => {
+    input = WebMidi.inputs[e.value];
+    output = WebMidi.outputs[e.value];    
+  };
   var light_state = [];
   var position = 0;
   for (var i = 0; i < 64; i++) { light_state[i] = 0 };
