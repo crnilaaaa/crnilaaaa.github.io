@@ -110,11 +110,11 @@ function doStart() {
       logg("xstep");
       if(triggers[position]) {
         synth.triggerRelease(note[position]);
-        red(position);
-      } else { off(position); }
+        off(position);
+      }
       var ypos = position / 8;
-      position = position % 8;
       xstep > 0 ? position++ : position--;
+      position = position % 8;
       position = position < 0 ? position + 8 : position;
       position += 8 * ypos;
       if(triggers[position]) {
@@ -127,8 +127,8 @@ function doStart() {
       logg("ystep");
       if(triggers[position]) {
         synth.triggerRelease(note[position]);
-        red(position);
-      } else { off(position); }
+        off(position);
+      }
       ystep > 0 ? position += 8 : position -= 8;
       position = position % 64;
       position = position < 0 ? position + 64 : position;
