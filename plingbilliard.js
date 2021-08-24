@@ -2,7 +2,7 @@ function logg(text) {
   document.getElementById("log").prepend(text + "\n");
 }
 
-WebMidi.enable(function(err) {x
+WebMidi.enable(function(err) {
   if(err) {
     logg("blerg", err);
   }
