@@ -65,6 +65,12 @@ function doStart() {
       output = WebMidi.outputs[newval];
       logg("changed device: " + e + " " + newval);
     };
+    elem = document.getElementById("tempo");
+    elem.onchange = (e) => {
+      var newval = document.getElementById("tempo").value;
+      Tone.Transport.bpm = newval;
+      logg("changed tempo: " + tempo);
+    }
     var light_state = [];
     var position = 0;
     for (var i = 0; i < 64; i++) { light_state[i] = 0 };
