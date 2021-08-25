@@ -68,7 +68,7 @@ function doStart() {
     elem = document.getElementById("tempo");
     elem.onchange = (e) => {
       var newval = document.getElementById("tempo").value;
-      Tone.Transport.bpm = newval;
+      Tone.Transport.bpm.value = newval;
       logg("changed tempo: " + tempo);
     }
     var light_state = [];
