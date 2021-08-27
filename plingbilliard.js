@@ -2,63 +2,390 @@ function logg(text) {
   document.getElementById("log").prepend(text + "\n");
 }
 
+class APCMini {
+
+  // https://raw.githubusercontent.com/PaulBGD/PixelFont/master/script.js
+  #letters = letters = {
+        'A': [
+            [, 1],
+            [1, , 1],
+            [1, , 1],
+            [1, 1, 1],
+            [1, , 1]
+        ],
+        'B': [
+            [1, 1],
+            [1, , 1],
+            [1, 1, 1],
+            [1, , 1],
+            [1, 1]
+        ],
+        'C': [
+            [1, 1, 1],
+            [1],
+            [1],
+            [1],
+            [1, 1, 1]
+        ],
+        'D': [
+            [1, 1],
+            [1, , 1],
+            [1, , 1],
+            [1, , 1],
+            [1, 1]
+        ],
+        'E': [
+            [1, 1, 1],
+            [1],
+            [1, 1, 1],
+            [1],
+            [1, 1, 1]
+        ],
+        'F': [
+            [1, 1, 1],
+            [1],
+            [1, 1],
+            [1],
+            [1]
+        ],
+        'G': [
+            [, 1, 1],
+            [1],
+            [1, , 1, 1],
+            [1, , , 1],
+            [, 1, 1]
+        ],
+        'H': [
+            [1, , 1],
+            [1, , 1],
+            [1, 1, 1],
+            [1, , 1],
+            [1, , 1]
+        ],
+        'I': [
+            [1, 1, 1],
+            [, 1],
+            [, 1],
+            [, 1],
+            [1, 1, 1]
+        ],
+        'J': [
+            [1, 1, 1],
+            [, , 1],
+            [, , 1],
+            [1, , 1],
+            [1, 1, 1]
+        ],
+        'K': [
+            [1, , , 1],
+            [1, , 1],
+            [1, 1],
+            [1, , 1],
+            [1, , , 1]
+        ],
+        'L': [
+            [1],
+            [1],
+            [1],
+            [1],
+            [1, 1, 1]
+        ],
+        'M': [
+            [1, 1, 1, 1, 1],
+            [1, , 1, , 1],
+            [1, , 1, , 1],
+            [1, , , , 1],
+            [1, , , , 1]
+        ],
+        'N': [
+            [1, , , 1],
+            [1, 1, , 1],
+            [1, , 1, 1],
+            [1, , , 1],
+            [1, , , 1]
+        ],
+        'O': [
+            [1, 1, 1],
+            [1, , 1],
+            [1, , 1],
+            [1, , 1],
+            [1, 1, 1]
+        ],
+        'P': [
+            [1, 1, 1],
+            [1, , 1],
+            [1, 1, 1],
+            [1],
+            [1]
+        ],
+        'Q': [
+            [0, 1, 1],
+            [1, , , 1],
+            [1, , , 1],
+            [1, , 1, 1],
+            [1, 1, 1, 1]
+        ],
+        'R': [
+            [1, 1],
+            [1, , 1],
+            [1, , 1],
+            [1, 1],
+            [1, , 1]
+        ],
+        'S': [
+            [1, 1, 1],
+            [1],
+            [1, 1, 1],
+            [, , 1],
+            [1, 1, 1]
+        ],
+        'T': [
+            [1, 1, 1],
+            [, 1],
+            [, 1],
+            [, 1],
+            [, 1]
+        ],
+        'U': [
+            [1, , 1],
+            [1, , 1],
+            [1, , 1],
+            [1, , 1],
+            [1, 1, 1]
+        ],
+        'V': [
+            [1, , , , 1],
+            [1, , , , 1],
+            [, 1, , 1],
+            [, 1, , 1],
+            [, , 1]
+        ],
+        'W': [
+            [1, , , , 1],
+            [1, , , , 1],
+            [1, , , , 1],
+            [1, , 1, , 1],
+            [1, 1, 1, 1, 1]
+        ],
+        'X': [
+            [1, , , , 1],
+            [, 1, , 1],
+            [, , 1],
+            [, 1, , 1],
+            [1, , , , 1]
+        ],
+        'Y': [
+            [1, , 1],
+            [1, , 1],
+            [, 1],
+            [, 1],
+            [, 1]
+        ],
+        'Z': [
+            [1, 1, 1, 1, 1],
+            [, , , 1],
+            [, , 1],
+            [, 1],
+            [1, 1, 1, 1, 1]
+        ],
+        '0': [
+            [1, 1, 1],
+            [1, , 1],
+            [1, , 1],
+            [1, , 1],
+            [1, 1, 1]
+        ],
+        '1': [
+            [, 1],
+            [, 1],
+            [, 1],
+            [, 1],
+            [, 1]
+        ],
+        '2': [
+            [1,1,1],
+            [0,0,1],
+            [1,1,1],
+            [1,0,0],
+            [1,1,1]
+        ],
+        '3':[
+            [1,1,1],
+            [0,0,1],
+            [1,1,1],
+            [0,0,1],
+            [1,1,1]
+        ],
+        '4':[
+            [1,0,1],
+            [1,0,1],
+            [1,1,1],
+            [0,0,1],
+            [0,0,1]
+        ],
+        '5':[
+            [1,1,1],
+            [1,0,0],
+            [1,1,1],
+            [0,0,1],
+            [1,1,1]
+        ],
+        '6':[
+            [1,1,1],
+            [1,0,0],
+            [1,1,1],
+            [1,0,1],
+            [1,1,1]
+        ],
+        '7':[
+            [1,1,1],
+            [0,0,1],
+            [0,0,1],
+            [0,0,1],
+            [0,0,1]
+        ],
+        '8':[
+            [1,1,1],
+            [1,0,1],
+            [1,1,1],
+            [1,0,1],
+            [1,1,1]
+        ],
+        '9':[
+            [1,1,1],
+            [1,0,1],
+            [1,1,1],
+            [0,0,1],
+            [1,1,1]
+        ],
+        ' ': [
+            [, ,],
+            [, ,],
+            [, ,],
+            [, ,],
+            [, ,]
+        ]
+    };
+
+  #rate = 1.2;
+
+  #Buttons = {
+    grid  : [],
+    row   : [],
+    col   : [],
+    shift : [],
+  }
+
+  #Button = class {
+    this.lightstate = 0;
+    this.onNoteOn = 0;
+    this.onNoteoff = 0;
+    #apc;
+    #id;
+
+    constructor(apc, id) {
+      this.apc = apc;
+      this.id = id;
+    };
+
+    off()     { this.lightstate = 0; }
+
+    on()      { this.lightstate = 1; }
+    blink()   { this.lightstate = 2; }
+    // row & col only have ^, grid has v, shift has none
+    green()   { this.lightstate = 1; }
+    red()     { this.lightstate = 3; }
+    yellow()  { this.lightstate = 5; }
+
+    toggleBlink() {
+      this.lightstate += this.lightstate ? this.lightstate % 2 ? -1 : 1 : 0;
+    }
+    update() {
+      setInterval(() => { this.apc.output(0x90, this.lightstate, this.id) }, 0);
+    }
+  }
+
+  constructor(input, output) {
+    this.input = input;
+    this.output = output;;
+
+    let chops = [
+      new Wad({source: "amen13.wav"}),
+      new Wad({source: "amen14.wav"}),
+      new Wad({source: "amen15.wav"}),
+      new Wad({source: "amen16.wav"}),
+    ];
+    // grid
+    for(let i = 0; i < 64; ++i) {
+      let newButton = this.Buttons.grid[i] = new this.#Button(this, i);
+      let chop = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
+      newButton.onNoteOn = () => {
+        chops[chop].play({ rate: rate });
+      }
+    }
+    for(let i = 64; i < 72; ++i) {
+      this.Buttons.row[i] = new this.#Button(this, i);
+    }
+    for(let i = 82; i < 90; ++i) {
+      this.Buttons.col[i] = new this.#Button(this, i);
+    }
+    this.Buttons.shift = new this.#Button(this, 98);
+
+    let handleOnOff = (on, e) => {
+      if (e.data[0] == 0x90) {
+        if (0 <= e.data[1] < 64) {
+          on ? this.Buttons.grid[i].onNoteOn() : this.Buttons.grid[i].onNoteOff();
+        }
+        else if (64 <= e.data[1] < 72) {
+          on ? this.Buttons.row[i].onNoteOn() : this.Buttons.row[i].onNoteOff();
+        }
+        else if (82 <= e.data[1] < 90) {
+          on ? this.Buttons.col[i].onNoteOn() : this.Buttons.col[i].onNoteOff();
+        }
+        else if (e.data[1] = 98) {
+          on ? this.Buttons.shift.onNoteOn() : this.Buttons.shift.onNoteOff();
+        }
+      }
+      else if (e.data[0] == 0xB0) {
+        // faders
+      }
+      else {
+        console.log("not a stock APC mini! jsyk~");
+      }
+    }
+
+    input.addListener('noteon', handleOnOff(true, e));
+    input.addListener('noteoff', handleOnOff(false, e));
+  }
+
+  update() {
+    Buttons.forEach(setInterval((b) => { b.update() }, 0));
+  }
+}
+
 function doStart() {
   Tone.start();
   Tone.Transport.start();
-  
+
   WebMidi.enable(function(err) {
     if(err) {
       logg("blerg", err);
     }
 
-    var amenchops = [];
-    for (var i = 0; i < 16; ++i) {
-      amenchops[amenchops.length] = new Wad({source: `amen${i + 1}.wav`});
-    }
-
-    var octaveRange = 0;
-    var noteStep = 1;
-    var note = 
-     [0, 0, 0, 0, 0, 0, 0, 0, 
-      0, 0, 0, 0, 0, 0, 0, 0, 
-      0, 0, 0, 0, 0, 0, 0, 0, 
-      0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 
-      0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0, 0, 0, 0, 0, 0, 
-      0, 0, 0, 0, 0, 0, 0, 0];
     var xstepLoop;
     var ystepLoop;
     var xstep = 0;
     var ystep = 0;
     var negxstep = false;
     var negystep = false;
-    const stepkinds = [
-      "0",
-      "1n",
-      "2n",
-      "2n.",
-      "2t",
-      "4n",
-      "4n.",
-      "4t",
-      "8n",
-      "8n.",
-      "8t",
-      "16n",
-      "16n.",
-      "16t",
-      "32n",
-      "32n.",
-      "32t",
-      "64n"
-      ];
-    var synth = new Tone.PolySynth({ release: .1 }).toDestination();
-    var input = WebMidi.inputs[document.getElementById("devicenumber").value];
-    var output = WebMidi.outputs[document.getElementById("devicenumber").value];
+    const stepkinds = [ "0", "1n", "2n", "2n.", "2t", "4n",
+      "4n.", "4t", "8n", "8n.", "8t", "16n", "16n.", "16t",
+      "32n", "32n.", "32t", "64n" ];
+
+    var output;
+    var input = output = WebMidi.inputs[document.getElementById("devicenumber").value];
     logg(input.value + " i/o " + output + "  " + document.getElementById("devicenumber").value);
     var elem = document.getElementById("devicenumber");
-    logg(elem);
     elem.onchange = (e) => {
       var newval = document.getElementById("devicenumber").value;
       input = WebMidi.inputs[newval];
@@ -71,48 +398,9 @@ function doStart() {
       Tone.Transport.bpm.value = newval;
       logg("changed tempo: " + tempo);
     }
-    var light_state = [];
-    var position = 0;
-    for (var i = 0; i < 64; i++) { light_state[i] = 0 };
-    var allOff = () => {
-      for (var i = 0; i < 64; i++) {
-        output.send(0x90, [i, light_state[i] = 0]);
-        document.getElementById("checkbox" + i).indeterminate = false; // ??
-      }
-    };
 
     /* C major: 48 50 52 53 55 57 59 60
                0  2  4  5  7  9 11 12 */
-
-    function setUpNoteGrid(step = 1) {
-      var __scalePosition = 0;
-      var octave = 4;
-      var scale = (step = 1) => {
-        __scalePosition += step;
-        if (__scalePosition >= 7) {
-          octave++;
-          __scalePosition -= 7
-        }
-        if (octave > octaveRange + 4) {
-          octave = 3; 
-        }
-        return ["C", "D", "E", "F", "G", "A", "B"][__scalePosition];
-      }
-
-      note[0] = "C4";
-      document.getElementById("textbox0").value = note[0];
-      for(var i = 1; i < 64; ++i) {
-        note[i] = scale(step) + octave;
-        document.getElementById("textbox" + i).value = note[i];
-      }
-    }
-
-    setUpNoteGrid();
-
-    var green = (btn) => { output.send(0x90, [btn, light_state[btn] = 1]); };
-    var red = (btn) => { output.send(0x90, [btn, light_state[btn] = 3]); };
-    var toggleblink = (btn) => { output.send(0x90, btn, Math.abs(light_state[btn] - 4)); };
-    var off = (btn) => { output.send(0x90, [btn, 0]); };
 
     var toggled = false;
     var triggers = [];
@@ -151,96 +439,10 @@ function doStart() {
       green(position);
     }
 
-    input.addListener('noteoff', 'all', function(e) { 
-      if (e.data[1] < 64) { 
-        // synth.triggerRelease(note[e.data[1]]);
-        if (triggers[e.data[1]]) red(e.data[1]);
-        if (!toggled) off(e.data[1])
-        else red(e.data[1]);
-      }
-      if (e.data[1] == 98) {
-        logg("toggled: " + (toggled = false));
-      }
-      if (toggled && 63 < e.data[1] < 68) {
-        off(e.data[1]);
-        switch(e.data[1]) {
-          case 64: 
-          case 65: if (ystepLoop) ystepLoop.stop, ystepLoop.dispose();
-            document.getElementById("ysteptextbox").value = ystep;
-            ystepLoop = new Tone.Loop((time) => { yStep(); }, 
-              stepkinds[Math.abs(ystep)]).start(Tone.now() + 
-                (new Tone.Time(Math.abs(ystep))).quantize(stepkinds[ystep]));
-            break;
-          case 66: 
-          case 67: if (xstepLoop) xstepLoop.stop, xstepLoop.dispose();
-            document.getElementById("xsteptextbox").value = xstep;
-            xstepLoop = new Tone.Loop((time) => { xStep(); }, 
-              stepkinds[Math.abs(xstep)]).start(Tone.now() +
-                (new Tone.Time(Math.abs(xstep))).quantize(stepkinds[xstep]));
-            break;
-        }
-      }
-    });
+    var apc = new APCMini(input, output);
 
-    input.addListener('noteon', 'all',
-      function(e) {
-        var vv = e.data[1];
-        var ll = light_state;
-        if (vv == 98) 
-          logg("toggled: " + (toggled = true));
-        // messyyyy :( 
-        // gotta sort the toggle better etc
-        if (vv < 64) {        
-          if (toggled) {
-            if(triggers[vv]) {
-              logg("trigger " + vv + ": " + (triggers[vv] = false));
-              off(vv);
-            } else {
-              logg("trigger " + vv + ": " + (triggers[vv] = true));
-              red(vv);
-            }
-          } else { 
-            green(vv); 
-            //synth.triggerAttack(note[vv]);
-            amenchops[vv % 16].play()
-            logg("playing " + note[vv] + " triggered by " + vv );
-          }
-        }
-        else if (toggled && 63 < vv < 68) {
-          green(vv);
-          switch(vv) {
-            case 64: ++ystep; break;
-            case 65: --ystep; break;
-            case 66: --xstep; break;
-            case 67: ++xstep; break;
-            default: break;
-          }
-          xstep = xstep <= -stepkinds.length ? -stepkinds.length : xstep;
-          xstep = xstep >=  stepkinds.length ? stepkinds.length - 1 : xstep
-          ystep = ystep <= -stepkinds.length ? -stepkinds.length : ystep;
-          ystep = ystep >=  stepkinds.length ? stepkinds.length - 1 : ystep;
-          logg("xstep: " + xstep + " " + stepkinds[Math.abs(xstep)] + "  ystep: " + ystep + " " + stepkinds[Math.abs(ystep)]);
-        }
-        else if (vv == 64) {
-          setUpNoteGrid(++noteStep);
-          logg("notestep: " + noteStep);
-        }
-        else if (vv == 65) {
-          if (noteStep > 0) {
-            setUpNoteGrid(--noteStep);
-          }
-          logg("notestep: " + noteStep);
-        }
-        else if (vv == 66) {        
-          octaveRange > 0 ? logg("octave range: " + --octaveRange) : logg("octave range min");
-          setUpNoteGrid(noteStep);
-        }
-        else if (vv == 67) {
-          logg("octave range: " + (++octaveRange));
-          setUpNoteGrid(noteStep);
-        }
-      }
-    );
   });
 
 }
+
+# vim: set expandtab:tabstop=2:shiftwidth=2
