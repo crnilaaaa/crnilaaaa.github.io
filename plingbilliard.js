@@ -5,7 +5,7 @@ function logg(text) {
 class APCMini {
 
   // https://raw.githubusercontent.com/PaulBGD/PixelFont/master/script.js
-  #letters = letters = {
+  #letters = {
         'A': [
             [, 1],
             [1, , 1],
