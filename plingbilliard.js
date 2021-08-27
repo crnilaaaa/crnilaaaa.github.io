@@ -317,33 +317,33 @@ class APCMini {
     ];
     // grid
     for(let i = 0; i < 64; ++i) {
-      let newButton = this.Buttons.grid[i] = new this.#Button(this, i);
+      let newButton = this.#Buttons.grid[i] = new this.#Button(this, i);
       let chop = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
       newButton.onNoteOn = () => {
         chops[chop].play({ rate: rate });
       }
     }
     for(let i = 64; i < 72; ++i) {
-      this.Buttons.row[i] = new this.#Button(this, i);
+      this.#Buttons.row[i] = new this.#Button(this, i);
     }
     for(let i = 82; i < 90; ++i) {
-      this.Buttons.col[i] = new this.#Button(this, i);
+      this.#Buttons.col[i] = new this.#Button(this, i);
     }
-    this.Buttons.shift = new this.#Button(this, 98);
+    this.#Buttons.shift = new this.#Button(this, 98);
 
     let handleOnOff = (on, e) => {
       if (e.data[0] == 0x90) {
         if (0 <= e.data[1] < 64) {
-          on ? this.Buttons.grid[i].onNoteOn() : this.Buttons.grid[i].onNoteOff();
+          on ? this.#Buttons.grid[i].onNoteOn() : this.#Buttons.grid[i].onNoteOff();
         }
         else if (64 <= e.data[1] < 72) {
-          on ? this.Buttons.row[i].onNoteOn() : this.Buttons.row[i].onNoteOff();
+          on ? this.#Buttons.row[i].onNoteOn() : this.#Buttons.row[i].onNoteOff();
         }
         else if (82 <= e.data[1] < 90) {
-          on ? this.Buttons.col[i].onNoteOn() : this.Buttons.col[i].onNoteOff();
+          on ? this.#Buttons.col[i].onNoteOn() : this.#Buttons.col[i].onNoteOff();
         }
         else if (e.data[1] = 98) {
-          on ? this.Buttons.shift.onNoteOn() : this.Buttons.shift.onNoteOff();
+          on ? this.#Buttons.shift.onNoteOn() : this.#Buttons.shift.onNoteOff();
         }
       }
       else if (e.data[0] == 0xB0) {
