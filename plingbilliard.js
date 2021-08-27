@@ -382,8 +382,8 @@ function doStart() {
       "4n.", "4t", "8n", "8n.", "8t", "16n", "16n.", "16t",
       "32n", "32n.", "32t", "64n" ];
 
-    var output;
-    var input = output = WebMidi.inputs[document.getElementById("devicenumber").value];
+    var output = WebMidi.outputs[document.getElementById("devicenumber").value];;
+    var input = WebMidi.inputs[document.getElementById("devicenumber").value];
     logg(input.value + " i/o " + output + "  " +
       document.getElementById("devicenumber").value);
     var elem = document.getElementById("devicenumber");
