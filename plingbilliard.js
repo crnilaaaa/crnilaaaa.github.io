@@ -384,7 +384,8 @@ function doStart() {
 
     var output;
     var input = output = WebMidi.inputs[document.getElementById("devicenumber").value];
-    logg(input.value + " i/o " + output + "  " + document.getElementById("devicenumber").value);
+    logg(input.value + " i/o " + output + "  " +
+      document.getElementById("devicenumber").value);
     var elem = document.getElementById("devicenumber");
     elem.onchange = (e) => {
       var newval = document.getElementById("devicenumber").value;
