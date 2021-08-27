@@ -277,9 +277,9 @@ class APCMini {
   }
 
   #Button = class {
-    this.lightstate = 0;
-    this.onNoteOn = 0;
-    this.onNoteoff = 0;
+    lightstate = 0;
+    onNoteOn = 0;
+    onNoteoff = 0;
     #apc;
     #id;
 
