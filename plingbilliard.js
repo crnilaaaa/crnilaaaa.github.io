@@ -265,16 +265,42 @@ class APCMini {
             [, ,],
             [, ,]
         ]
-    };
+  };
 
-  #rate = 1.2;
+  #Cursor = class {
+    posx = 0;
+    posy = 0;
+    stepxfreq = 0;
+    stepyfreq = 0;
+    stepxlen = 0;
+    stepylen = 0;
+    #apc;
+    #update;
 
-  #Buttons = {
+    stepkinds = [ "0", "1n", "2n", "2n.", "2t", "4n",
+      "4n.", "4t", "8n", "8n.", "8t", "16n", "16n.", "16t",
+      "32n", "32n.", "32t", "64n" ];
+
+    constructor(apc) {
+      this.#apc = apc;
+      this.#update = () => {
+        posx += stepxlen;
+        posy += stepylen;
+        this.#apc.Buttons[posx + 8 * posy].on();
+      }
+      Tone.Transport.
+    }
+
+  };
+
+  #rate = 1.0;
+
+  Buttons = {
     grid  : [],
     row   : [],
     col   : [],
     shift : [],
-  }
+  };
 
   #Button = class {
     lightstate = 0;
@@ -282,28 +308,30 @@ class APCMini {
     onNoteoff = 0;
     #apc;
     #id;
+    #update;
 
     constructor(apc, id) {
       this.apc = apc;
       this.id = id;
+      this.#update = () => {
+        this.apc.output.send(0x90, [this.id, this.lightstate]);
+      }
     };
 
-    off()     { this.lightstate = 0; }
+    off()     { this.lightstate = 0; this.#update() }
 
-    on()      { this.lightstate = 1; }
-    blink()   { this.lightstate = 2; }
+    on()      { this.lightstate = 1; this.#update() }
+    blink()   { this.lightstate = 2; this.#update() }
     // row & col only have ^, grid has v, shift has none
-    green()   { this.lightstate = 1; }
-    red()     { this.lightstate = 3; }
-    yellow()  { this.lightstate = 5; }
+    green()   { this.lightstate = 1; this.#update() }
+    red()     { this.lightstate = 3; this.#update() }
+    yellow()  { this.lightstate = 5; this.#update() }
 
     toggleBlink() {
       this.lightstate += this.lightstate ? this.lightstate % 2 ? -1 : 1 : 0;
     }
-    update() {
-      setInterval(() => { this.apc.output(0x90, this.lightstate, this.id) }, 0);
-    }
-  }
+
+  };
 
   constructor(input, output) {
     this.input = input;
@@ -315,51 +343,78 @@ class APCMini {
       new Wad({source: "amen15.wav"}),
       new Wad({source: "amen16.wav"}),
     ];
-    // grid
+
     for(let i = 0; i < 64; ++i) {
-      let newButton = this.#Buttons.grid[i] = new this.#Button(this, i);
+      let newButton = this.Buttons.grid[i] = new this.#Button(this, i);
       let chop = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
       newButton.onNoteOn = () => {
-        chops[chop].play({ rate: rate });
+        chops[chop].play({ rate: this.#rate });
+        newButton.on();
+      };
+      newButton.onNoteOff = () => {
+        newButton.off();
       }
     }
+
     for(let i = 64; i < 72; ++i) {
-      this.#Buttons.row[i] = new this.#Button(this, i);
+      let newButton = this.Buttons.row[i] = new this.#Button(this, i);
+      newButton.onNoteOn = () => {
+        newButton.on();
+      };
+      newButton.onNoteOff = () => {
+        newButton.off();
+      }
     }
+
     for(let i = 82; i < 90; ++i) {
-      this.#Buttons.col[i] = new this.#Button(this, i);
+      let newButton = this.Buttons.col[i] = new this.#Button(this, i);
+      newButton.onNoteOn = () => {
+        newButton.on();
+      };
+      newButton.onNoteOff = () => {
+        newButton.off();
+      }
     }
-    this.#Buttons.shift = new this.#Button(this, 98);
+
+    this.Buttons.shift = new this.#Button(this, 98);
+    this.Buttons.shift.onNoteOn = () => {
+      // no light
+    }
+    this.Buttons.shift.onNoteOff = () => {
+    }
 
     let handleOnOff = (on, e) => {
-      if (e.data[0] == 0x90) {
-        if (0 <= e.data[1] < 64) {
-          on ? this.#Buttons.grid[i].onNoteOn() : this.#Buttons.grid[i].onNoteOff();
+      if (e.data[0] == 0x90 || e.data[0] == 0x80) {
+        console.log("data: " + e.data);
+        if (0 <= e.data[1] && e.data[1] < 64) {
+          if (on) {
+            this.Buttons.grid[e.data[1]].onNoteOn();
+            logg("handling on");
+          }
+          else {
+            this.Buttons.grid[e.data[1]].onNoteOff();
+            logg("handling off");
+          }
         }
-        else if (64 <= e.data[1] < 72) {
-          on ? this.#Buttons.row[i].onNoteOn() : this.#Buttons.row[i].onNoteOff();
+        else if (64 <= e.data[1] && e.data[1] < 72) {
+          on ? this.Buttons.row[e.data[1]].onNoteOn()
+            : this.Buttons.row[e.data[1]].onNoteOff();
         }
-        else if (82 <= e.data[1] < 90) {
-          on ? this.#Buttons.col[i].onNoteOn() : this.#Buttons.col[i].onNoteOff();
+        else if (82 <= e.data[1] && e.data[1] < 90) {
+          on ? this.Buttons.col[e.data[1]].onNoteOn()
+            : this.Buttons.col[e.data[1]].onNoteOff();
         }
-        else if (e.data[1] = 98) {
-          on ? this.#Buttons.shift.onNoteOn() : this.#Buttons.shift.onNoteOff();
+        else if (e.data[1] == 98) {
+          on ? this.Buttons.shift.onNoteOn() : this.Buttons.shift.onNoteOff();
         }
       }
       else if (e.data[0] == 0xB0) {
         // faders
       }
-      else {
-        console.log("not a stock APC mini! jsyk~");
-      }
     }
 
-    input.addListener('noteon', handleOnOff(true, e));
-    input.addListener('noteoff', handleOnOff(false, e));
-  }
-
-  update() {
-    Buttons.forEach(setInterval((b) => { b.update() }, 0));
+    input.addListener('noteon', "all", (e) => { logg("on??"); handleOnOff(true, e) });
+    input.addListener('noteoff', "all", (e) => { logg("off??"); handleOnOff(false, e) });
   }
 }
 
@@ -384,8 +439,10 @@ function doStart() {
 
     var output = WebMidi.outputs[document.getElementById("devicenumber").value];;
     var input = WebMidi.inputs[document.getElementById("devicenumber").value];
-    logg(input.value + " i/o " + output + "  " +
+
+    logg("input: " + input + " output: " + output + "  " + " number:" +
       document.getElementById("devicenumber").value);
+
     var elem = document.getElementById("devicenumber");
     elem.onchange = (e) => {
       var newval = document.getElementById("devicenumber").value;
@@ -393,6 +450,7 @@ function doStart() {
       output = WebMidi.outputs[newval];
       logg("changed device: " + e + " " + newval);
     };
+
     elem = document.getElementById("tempo");
     elem.onchange = (e) => {
       var newval = document.getElementById("tempo").value;
@@ -446,4 +504,4 @@ function doStart() {
 
 }
 
-/* # vim: set expandtab:tabstop=2:shiftwidth=2 */
+// vim: expandtab:tabstop=2:shiftwidth=2 
