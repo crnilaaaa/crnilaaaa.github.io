@@ -270,37 +270,44 @@ class APCMini {
   #Cursor = class {
     posx = 0;
     posy = 0;
-    stepxfreq = 1;
-    stepyfreq = 1;
+    stepxfreq = 5;
+    stepyfreq = 5;
     stepxlen = 0;
     stepylen = 0;
     apc;
     running = false;
     color = 1;
 
-    stepkinds = [ "0", "1n", "2n", "2n.", "2t", "4n",
+    stepkinds = [ "1n", "2n", "2n.", "2t", "4n",
       "4n.", "4t", "8n", "8n.", "8t", "16n", "16n.", "16t",
       "32n", "32n.", "32t", "64n" ];
 
-    get stepxfreq() {
-       return this.stepkinds[this.stepxfreq];
+    yfreqinc() {
+      logg("stepyfreq: " + (this.stepyfreq < this.stepkinds.length ? this.stepkinds[++this.stepyfreq] : this.stepkinds[this.stepkinds.length - 1]));
+    }
+
+    yfreqdec() {
+      logg("stepyfreq: " + (this.stepyfreq > 0 ? this.stepkinds[--this.stepyfreq] : this.stepkinds[0]));
     }
 
     xfreqinc() {
-      logg("stepxfreq: " + (this.stepxfreq < this.stepkinds.length ? this.stepxfreq++ : 0));
+      logg("stepxfreq: " + (this.stepxfreq < this.stepkinds.length ? this.stepkinds[++this.stepxfreq] : this.stepkinds[this.stepkinds.length - 1]));
     }
 
     xfreqdec() {
-      logg("stepxfreq: " + (this.stepxfreq > 0 ? this.stepxfreq-- : 0));
+      logg("stepxfreq: " + (this.stepxfreq > 0 ? this.stepkinds[--this.stepxfreq] : this.stepkinds[0]));
     }
 
     updatex(time) {
-      logg("uhh updatex");
+      let nextTime = Tone.getTransport().nextSubdivision(this.stepkinds[this.stepxfreq]);
+      Tone.getTransport().schedule((innertime) => {
+        this.updatex(innertime);
+      }, nextTime);
+
       if (this.running) {
         let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posx));
-        logg("gridpos: " + gridpos);
         let btn = this.apc.Buttons.grid[gridpos];
-        // logg("this.posx + 8 * this.posy: " + this.posx + 8 * this.posy);
+        // logg("this.posx + 8 * this.posx: " + this.posx + 8 * this.posx);
         btn.onNoteOff();
         (this.posx += this.stepxlen) < 0 ? this.posx += 8 : this.posx %= 8;
 
@@ -312,14 +319,14 @@ class APCMini {
     }
 
     updatey(time) {
-      logg("uhh updatey " + this.stepyfreq + " " + time + "\n" + new Tone.Time(this.stepyfreq));
-      Tone.getTransport().schedule((time) => {
-        this.updatey(time)
-      }, Tone.getTransport().nextSubdivision(this.stepkinds[this.stepyfreq]));
+      let nextTime = Tone.getTransport().nextSubdivision(this.stepkinds[this.stepyfreq]);
+      logg("updatey nexttime: " + nextTime);
+      Tone.getTransport().schedule((innertime) => {
+        this.updatey(innertime)
+      }, nextTime);
 
       if (this.running) {
         let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posx));
-        logg("gridpos: " + gridpos);
         let btn = this.apc.Buttons.grid[gridpos];
         // logg("this.posx + 8 * this.posy: " + this.posx + 8 * this.posy);
         btn.onNoteOff();
@@ -456,8 +463,8 @@ class APCMini {
         newButton.onNoteOn = () => {
           cursors.forEach((c) => { c.color = 1 });
           logg("cur: " + curCursor + " all: " + cursors );
-          cursors[curCursor].color = 3;
           curCursor = curCursor == cursors.length - 1 ? 0 : curCursor + 1;
+          cursors[curCursor].color = 3;
           newButton.on();
         }
         newButton.onNoteOff = () => {
@@ -514,25 +521,25 @@ class APCMini {
           case 64:
             btn.onNoteOn = () => {
               btn.on();
-              cursors[curCursor].stepyfreq++;
+              cursors[curCursor].yfreqinc();
             };
             break;
           case 65:
             btn.onNoteOn = () => {
               btn.on();
-              cursors[curCursor]--;
+              cursors[curCursor].yfreqdec();
             };
             break;
           case 66:
             btn.onNoteOn = () => {
               btn.on();
-              cursors[curCursor]--;
+              cursors[curCursor].xfreqdec();
             };
             break;
           case 67:
             btn.onNoteOn = () => {
               btn.on();
-              cursors[curCursor]++;
+              cursors[curCursor].xfreqinc();
             };
             break;
         }
