@@ -1,4 +1,4 @@
-function logg(text) {
+function logg(text = false) {
   document.getElementById("log").prepend(text + "\n");
 }
 
@@ -270,28 +270,80 @@ class APCMini {
   #Cursor = class {
     posx = 0;
     posy = 0;
-    stepxfreq = 0;
-    stepyfreq = 0;
+    stepxfreq = 1;
+    stepyfreq = 1;
     stepxlen = 0;
     stepylen = 0;
-    #apc;
-    #update;
+    apc;
+    running = false;
+    color = 1;
 
     stepkinds = [ "0", "1n", "2n", "2n.", "2t", "4n",
       "4n.", "4t", "8n", "8n.", "8t", "16n", "16n.", "16t",
       "32n", "32n.", "32t", "64n" ];
 
-    constructor(apc) {
-      this.#apc = apc;
-      this.#update = () => {
-        posx += stepxlen;
-        posy += stepylen;
-        this.#apc.Buttons[posx + 8 * posy].on();
-      }
-      Tone.Transport.
+    get stepxfreq() {
+       return this.stepkinds[this.stepxfreq];
     }
 
+    xfreqinc() {
+      logg("stepxfreq: " + (this.stepxfreq < this.stepkinds.length ? this.stepxfreq++ : 0));
+    }
+
+    xfreqdec() {
+      logg("stepxfreq: " + (this.stepxfreq > 0 ? this.stepxfreq-- : 0));
+    }
+
+    updatex(time) {
+      logg("uhh updatex");
+      if (this.running) {
+        let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posx));
+        logg("gridpos: " + gridpos);
+        let btn = this.apc.Buttons.grid[gridpos];
+        // logg("this.posx + 8 * this.posy: " + this.posx + 8 * this.posy);
+        btn.onNoteOff();
+        (this.posx += this.stepxlen) < 0 ? this.posx += 8 : this.posx %= 8;
+
+        gridpos = this.posx + 8 * this.posy;
+        btn = this.apc.Buttons.grid[gridpos];
+        btn.onNoteOn(true);
+        btn.on(this.color)
+      }
+    }
+
+    updatey(time) {
+      logg("uhh updatey " + this.stepyfreq + " " + time + "\n" + new Tone.Time(this.stepyfreq));
+      Tone.getTransport().schedule((time) => {
+        this.updatey(time)
+      }, Tone.getTransport().nextSubdivision(this.stepkinds[this.stepyfreq]));
+
+      if (this.running) {
+        let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posx));
+        logg("gridpos: " + gridpos);
+        let btn = this.apc.Buttons.grid[gridpos];
+        // logg("this.posx + 8 * this.posy: " + this.posx + 8 * this.posy);
+        btn.onNoteOff();
+        (this.posy += this.stepylen) < 0 ? this.posy += 8 : this.posy %= 8;
+
+        gridpos = this.posx + 8 * this.posy;
+        btn = this.apc.Buttons.grid[gridpos];
+        btn.onNoteOn(true);
+        btn.on(this.color)
+      }
+    }
+
+    constructor(apc, posx, posy) {
+      logg("constructor Cursor");
+      if (posx > 7 || posy > 7) {
+        throw("wrong posx: " + posx + " posy: " + posy);
+      }
+      this.posx = posx;
+      this.posy = posy;
+      this.apc = apc;
+      logg("done new cursor");
+    }
   };
+
 
   #rate = 1.0;
 
@@ -318,14 +370,14 @@ class APCMini {
       }
     };
 
-    off()     { this.lightstate = 0; this.#update() }
+    off()         { this.lightstate = 0; this.#update() }
 
-    on()      { this.lightstate = 1; this.#update() }
-    blink()   { this.lightstate = 2; this.#update() }
+    on(color = 1) { this.lightstate = color; this.#update() }
+    blink()       { this.lightstate = 2; this.#update() }
     // row & col only have ^, grid has v, shift has none
-    green()   { this.lightstate = 1; this.#update() }
-    red()     { this.lightstate = 3; this.#update() }
-    yellow()  { this.lightstate = 5; this.#update() }
+    green()       { this.lightstate = 1; this.#update() }
+    red()         { this.lightstate = 3; this.#update() }
+    yellow()      { this.lightstate = 5; this.#update() }
 
     toggleBlink() {
       this.lightstate += this.lightstate ? this.lightstate % 2 ? -1 : 1 : 0;
@@ -334,20 +386,26 @@ class APCMini {
   };
 
   constructor(input, output) {
+    let cursors = [];
+    var lastGrid = [];
+    let curCursor = 0;
     this.input = input;
-    this.output = output;;
+    this.output = output;
 
     let chops = [
-      new Wad({source: "amen13.wav"}),
-      new Wad({source: "amen14.wav"}),
-      new Wad({source: "amen15.wav"}),
-      new Wad({source: "amen16.wav"}),
+      new Wad({source: "amen1.wav"}),
+      new Wad({source: "amen2.wav"}),
+      new Wad({source: "amen4.wav"}),
+      new Wad({source: "amen8.wav"}),
+      new Wad({source: "amen7.wav"}),
+      new Wad({source: "amen6.wav"}),
     ];
 
     for(let i = 0; i < 64; ++i) {
       let newButton = this.Buttons.grid[i] = new this.#Button(this, i);
-      let chop = Math.floor(Math.random() * (3 - 0 + 1)) + 0;
-      newButton.onNoteOn = () => {
+      let chop = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
+      // TODO: hardcoded bool param :l
+      newButton.onNoteOn = (isCursor = false) => {
         chops[chop].play({ rate: this.#rate });
         newButton.on();
       };
@@ -358,29 +416,139 @@ class APCMini {
 
     for(let i = 64; i < 72; ++i) {
       let newButton = this.Buttons.row[i] = new this.#Button(this, i);
-      newButton.onNoteOn = () => {
-        newButton.on();
-      };
-      newButton.onNoteOff = () => {
-        newButton.off();
+      if (i == 64) {
+        newButton.onNoteOn = () => {
+          newButton.on();
+          cursors[curCursor].stepylen++;
+        }
+      } else if (i == 65) {
+        newButton.onNoteOn = () => {
+          newButton.on();
+          cursors[curCursor].stepylen--;
+        }
       }
+      else if (i == 66) {
+        newButton.onNoteOn = () => {
+          newButton.on();
+          cursors[curCursor].stepxlen--;
+        }
+      } else if (i == 67) {
+        newButton.onNoteOn = () => {
+          newButton.on();
+          cursors[curCursor].stepxlen++;
+        }
+      }
+      else {
+        newButton.onNoteOn = () => {
+          newButton.on();
+        };
+      }
+
+      newButton.onNoteOff = () => {
+          newButton.off();
+      }
+
     }
 
     for(let i = 82; i < 90; ++i) {
       let newButton = this.Buttons.col[i] = new this.#Button(this, i);
-      newButton.onNoteOn = () => {
-        newButton.on();
-      };
-      newButton.onNoteOff = () => {
-        newButton.off();
+      if(newButton.id == 86) { // select
+        newButton.onNoteOn = () => {
+          cursors.forEach((c) => { c.color = 1 });
+          logg("cur: " + curCursor + " all: " + cursors );
+          cursors[curCursor].color = 3;
+          curCursor = curCursor == cursors.length - 1 ? 0 : curCursor + 1;
+          newButton.on();
+        }
+        newButton.onNoteOff = () => {
+          newButton.off();
+        }
+      }
+      else {
+        newButton.onNoteOn = () => {
+          newButton.on();
+        };
+        newButton.onNoteOff = () => {
+          newButton.off();
+        }
       }
     }
 
     this.Buttons.shift = new this.#Button(this, 98);
+
+    var lastrow;
+
     this.Buttons.shift.onNoteOn = () => {
-      // no light
+      // this.Buttons.grid.forEach((b) => { b.red() });
+      logg("shift?");
+      lastGrid = this.Buttons.grid.map((b) => {
+        if(b) {
+          b.red();
+          let orig = b.onNoteOn;
+
+          b.onNoteOn = (isCursor = false) => {
+            if (isCursor) return orig();
+            // orig(b);
+            b.green();
+            let newcur = cursors[cursors.length] = new this.#Cursor(this, b.id % 8, Math.floor(b.id / 8));
+
+            logg("scheduling updates");
+            Tone.Transport.schedule((time) => {
+              logg("running updates");
+              newcur.updatex(time);
+              newcur.updatey(time);
+            }, Tone.getTransport().now() + new Tone.Time("1m"));
+          };
+
+          return orig;
+        }
+      });
+
+      lastrow = this.Buttons.row.map((b) => {
+          return b.onNoteOn ? b.onNoteOn : undefined;
+      });
+
+      for (let i = 64; i < 68; ++i) {
+        let btn = this.Buttons.row[i];
+        switch(i) {
+          case 64:
+            btn.onNoteOn = () => {
+              btn.on();
+              cursors[curCursor].stepyfreq++;
+            };
+            break;
+          case 65:
+            btn.onNoteOn = () => {
+              btn.on();
+              cursors[curCursor]--;
+            };
+            break;
+          case 66:
+            btn.onNoteOn = () => {
+              btn.on();
+              cursors[curCursor]--;
+            };
+            break;
+          case 67:
+            btn.onNoteOn = () => {
+              btn.on();
+              cursors[curCursor]++;
+            };
+            break;
+        }
+      }
     }
+
     this.Buttons.shift.onNoteOff = () => {
+      logg("unshift!");
+      for (let i = 0; i < 64; ++i) {
+        this.Buttons.grid[i].off();
+        this.Buttons.grid[i].onNoteOn = lastGrid[i];
+      }
+      for(let i = 64; i < 68; ++i) {
+        this.Buttons.row[i].onNoteOn = lastrow[i];
+      }
+      cursors.forEach((c) => { c.running = true });
     }
 
     let handleOnOff = (on, e) => {
@@ -397,6 +565,7 @@ class APCMini {
           }
         }
         else if (64 <= e.data[1] && e.data[1] < 72) {
+          this.Buttons.row[e.data[1]];
           on ? this.Buttons.row[e.data[1]].onNoteOn()
             : this.Buttons.row[e.data[1]].onNoteOff();
         }
@@ -421,18 +590,17 @@ class APCMini {
 function doStart() {
   Tone.start();
   Tone.Transport.start();
+  logg("hmmm?");
 
   WebMidi.enable(function(err) {
     if(err) {
+      throw("over");
       logg("blerg", err);
     }
+    else {
+      logg("not blerg?");
+    }
 
-    var xstepLoop;
-    var ystepLoop;
-    var xstep = 0;
-    var ystep = 0;
-    var negxstep = false;
-    var negystep = false;
     const stepkinds = [ "0", "1n", "2n", "2n.", "2t", "4n",
       "4n.", "4t", "8n", "8n.", "8t", "16n", "16n.", "16t",
       "32n", "32n.", "32t", "64n" ];
@@ -448,6 +616,7 @@ function doStart() {
       var newval = document.getElementById("devicenumber").value;
       input = WebMidi.inputs[newval];
       output = WebMidi.outputs[newval];
+
       logg("changed device: " + e + " " + newval);
     };
 
@@ -456,7 +625,7 @@ function doStart() {
       var newval = document.getElementById("tempo").value;
       Tone.Transport.bpm.value = newval;
       logg("changed tempo: " + tempo);
-    }
+    };
 
     /* C major: 48 50 52 53 55 57 59 60
                0  2  4  5  7  9 11 12 */
@@ -464,44 +633,11 @@ function doStart() {
     var toggled = false;
     var triggers = [];
 
-    function xStep() {
-      logg("xstep");
-      if(triggers[position]) {
-        // synth.triggerRelease(note[position]);
-        red(position);
-      } else { off(position) }
-      var ypos = Math.floor(position / 8);
-      xstep > 0 ? position++ : position--;
-      position = position % 8;
-      position = position < 0 ? position + 8 : position;
-      position += 8 * ypos;
-      if(triggers[position]) {
-        // synth.triggerAttack(note[position]);
-        amenchops[position % 16].play();
-      }
-      green(position);
-    }
-
-    function yStep() {
-      logg("ystep");
-      if(triggers[position]) {
-        // synth.triggerRelease(note[position]);
-        red(position);
-      } else { off(position) }
-      ystep > 0 ? position += 8 : position -= 8;
-      position = position % 64;
-      position = position < 0 ? position + 64 : position;
-      if(triggers[position]) {
-        // synth.triggerAttack(note[position]);
-        amenchops[position % 16].play();
-      }
-      green(position);
-    }
-
     var apc = new APCMini(input, output);
+    logg("ok go?");
 
   });
 
 }
 
-// vim: expandtab:tabstop=2:shiftwidth=2 
+// vim: expandtab:tabstop=2:shiftwidth=2
