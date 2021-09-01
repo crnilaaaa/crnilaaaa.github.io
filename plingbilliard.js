@@ -299,43 +299,53 @@ class APCMini {
     }
 
     updatex(time) {
-      let nextTime = Tone.getTransport().nextSubdivision(this.stepkinds[this.stepxfreq]);
+      logg("updating");
+      let nextTime = Tone.Time(Tone.Time(Tone.getTransport().position) + Tone.Time(this.stepkinds[this.stepxfreq]));
       Tone.getTransport().schedule((innertime) => {
+        logg("recurse call");
         this.updatex(innertime);
       }, nextTime);
 
       if (this.running) {
+        Tone.getTransport().schedule((innertime) => {
+          logg("off??");
+          btn.off();
+        }, Tone.Time(time) + Tone.Time(this.stepkinds[this.stepxfreq]) / 2);
+        logg("running");
         let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posx));
         let btn = this.apc.Buttons.grid[gridpos];
-        // logg("this.posx + 8 * this.posx: " + this.posx + 8 * this.posx);
         btn.onNoteOff();
         (this.posx += this.stepxlen) < 0 ? this.posx += 8 : this.posx %= 8;
 
         gridpos = this.posx + 8 * this.posy;
         btn = this.apc.Buttons.grid[gridpos];
         btn.onNoteOn(true);
-        btn.on(this.color)
       }
     }
 
     updatey(time) {
-      let nextTime = Tone.getTransport().nextSubdivision(this.stepkinds[this.stepyfreq]);
-      logg("updatey nexttime: " + nextTime);
+      logg("updating");
+      let nextTime = Tone.Time(Tone.Time(Tone.getTransport().position) + Tone.Time(this.stepkinds[this.stepyfreq]));
       Tone.getTransport().schedule((innertime) => {
-        this.updatey(innertime)
+        logg("recurse call");
+        this.updatey(innertime);
       }, nextTime);
 
       if (this.running) {
-        let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posx));
+        Tone.getTransport().schedule((innertime) => {
+          logg("off??");
+          btn.off();
+        }, Tone.Time(time) + Tone.Time(this.stepkinds[this.stepyfreq]) / 2);
+        logg("running");
+        let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posy));
         let btn = this.apc.Buttons.grid[gridpos];
-        // logg("this.posx + 8 * this.posy: " + this.posx + 8 * this.posy);
         btn.onNoteOff();
+
         (this.posy += this.stepylen) < 0 ? this.posy += 8 : this.posy %= 8;
 
-        gridpos = this.posx + 8 * this.posy;
+        gridpos = this.posy + 8 * this.posy;
         btn = this.apc.Buttons.grid[gridpos];
         btn.onNoteOn(true);
-        btn.on(this.color)
       }
     }
 
@@ -504,7 +514,7 @@ class APCMini {
               logg("running updates");
               newcur.updatex(time);
               newcur.updatey(time);
-            }, Tone.getTransport().now() + new Tone.Time("1m"));
+            }, Tone.getTransport().nextSubdivision("1m"));
           };
 
           return orig;
