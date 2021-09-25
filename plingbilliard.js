@@ -299,53 +299,48 @@ class APCMini {
     }
 
     updatex(time) {
-      logg("updating");
       let nextTime = Tone.Time(Tone.Time(Tone.getTransport().position) + Tone.Time(this.stepkinds[this.stepxfreq]));
       Tone.getTransport().schedule((innertime) => {
-        logg("recurse call");
         this.updatex(innertime);
       }, nextTime);
 
       if (this.running) {
+        let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posx));
+        var btn = this.apc.Buttons.grid[gridpos];
         Tone.getTransport().schedule((innertime) => {
-          logg("off??");
           btn.off();
         }, Tone.Time(time) + Tone.Time(this.stepkinds[this.stepxfreq]) / 2);
-        logg("running");
-        let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posx));
-        let btn = this.apc.Buttons.grid[gridpos];
         btn.onNoteOff();
+
         (this.posx += this.stepxlen) < 0 ? this.posx += 8 : this.posx %= 8;
 
         gridpos = this.posx + 8 * this.posy;
         btn = this.apc.Buttons.grid[gridpos];
         btn.onNoteOn(true);
+        btn.on(this.color);
       }
     }
 
     updatey(time) {
-      logg("updating");
       let nextTime = Tone.Time(Tone.Time(Tone.getTransport().position) + Tone.Time(this.stepkinds[this.stepyfreq]));
       Tone.getTransport().schedule((innertime) => {
-        logg("recurse call");
         this.updatey(innertime);
       }, nextTime);
 
       if (this.running) {
+        let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posx));
+        var btn = this.apc.Buttons.grid[gridpos];
         Tone.getTransport().schedule((innertime) => {
-          logg("off??");
           btn.off();
         }, Tone.Time(time) + Tone.Time(this.stepkinds[this.stepyfreq]) / 2);
-        logg("running");
-        let gridpos = parseInt(8 * parseInt(this.posy) + parseInt(this.posy));
-        let btn = this.apc.Buttons.grid[gridpos];
         btn.onNoteOff();
 
         (this.posy += this.stepylen) < 0 ? this.posy += 8 : this.posy %= 8;
 
-        gridpos = this.posy + 8 * this.posy;
+        gridpos = this.posx + 8 * this.posy;
         btn = this.apc.Buttons.grid[gridpos];
         btn.onNoteOn(true);
+        btn.on(this.color);
       }
     }
 
@@ -412,18 +407,75 @@ class APCMini {
     let chops = [
       new Wad({source: "amen1.wav"}),
       new Wad({source: "amen2.wav"}),
+      new Wad({source: "amen3.wav"}),
       new Wad({source: "amen4.wav"}),
-      new Wad({source: "amen8.wav"}),
-      new Wad({source: "amen7.wav"}),
+      new Wad({source: "amen5.wav"}),
       new Wad({source: "amen6.wav"}),
+      new Wad({source: "amen7.wav"}),
+      new Wad({source: "amen8.wav"}),
+      new Wad({source: "amen9.wav"}),
+      new Wad({source: "amen10.wav"}),
+      new Wad({source: "amen11.wav"}),
+      new Wad({source: "amen12.wav"}),
+      new Wad({source: "amen13.wav"}),
+      new Wad({source: "amen14.wav"}),
+      new Wad({source: "amen15.wav"}),
+      new Wad({source: "amen16.wav"}),
+      new Wad({source: "amen17.wav"}),
+      new Wad({source: "amen18.wav"}),
+      new Wad({source: "amen19.wav"}),
+      new Wad({source: "amen20.wav"}),
+      new Wad({source: "amen21.wav"}),
+      new Wad({source: "amen22.wav"}),
+      new Wad({source: "amen23.wav"}),
+      new Wad({source: "amen24.wav"}),
+      new Wad({source: "think1.wav"}),
+      new Wad({source: "think2.wav"}),
+      new Wad({source: "think3.wav"}),
+      new Wad({source: "think4.wav"}),
+      new Wad({source: "think5.wav"}),
+      new Wad({source: "think6.wav"}),
+      new Wad({source: "think7.wav"}),
+      new Wad({source: "think8.wav"}),
+      new Wad({source: "think9.wav"}),
+      new Wad({source: "think10.wav"}),
+      new Wad({source: "think11.wav"}),
+      new Wad({source: "think12.wav"}),
+      new Wad({source: "think13.wav"}),
+      new Wad({source: "think14.wav"}),
+      new Wad({source: "think15.wav"}),
+      new Wad({source: "think16.wav"}),
+      new Wad({source: "think17.wav"}),
+      new Wad({source: "think18.wav"}),
+      new Wad({source: "think19.wav"}),
+      new Wad({source: "think20.wav"}),
+      new Wad({source: "think21.wav"}),
+      new Wad({source: "think22.wav"}),
+      new Wad({source: "think23.wav"}),
+      new Wad({source: "think24.wav"}),
+      new Wad({source: "funky1.wav"}),
+      new Wad({source: "funky2.wav"}),
+      new Wad({source: "funky3.wav"}),
+      new Wad({source: "funky4.wav"}),
+      new Wad({source: "funky5.wav"}),
+      new Wad({source: "funky6.wav"}),
+      new Wad({source: "funky7.wav"}),
+      new Wad({source: "funky8.wav"}),
+      new Wad({source: "funky9.wav"}),
+      new Wad({source: "funky10.wav"}),
+      new Wad({source: "funky11.wav"}),
+      new Wad({source: "funky12.wav"}),
+      new Wad({source: "funky13.wav"}),
+      new Wad({source: "funky14.wav"}),
+      new Wad({source: "funky15.wav"}),
+      new Wad({source: "funky16.wav"}),
     ];
 
     for(let i = 0; i < 64; ++i) {
       let newButton = this.Buttons.grid[i] = new this.#Button(this, i);
-      let chop = Math.floor(Math.random() * (5 - 0 + 1)) + 0;
       // TODO: hardcoded bool param :l
       newButton.onNoteOn = (isCursor = false) => {
-        chops[chop].play({ rate: this.#rate });
+        chops[newButton.id].play({ rate: this.#rate });
         newButton.on();
       };
       newButton.onNoteOff = () => {
